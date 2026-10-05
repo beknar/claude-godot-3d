@@ -22,7 +22,7 @@ WindowControls="*res://game/window_controls.gd"
 
 [display]
 
-window/stretch/mode="viewport"
+window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
 [editor]
