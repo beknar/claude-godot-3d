@@ -4,11 +4,11 @@ A small Godot 4.7 flight game featuring a comic-book-styled space fighter, built
 inside the engine: the model, textures, sound effects and terrain are all generated —
 there are no imported art assets.
 
-Turntable video: [fighter_turntable_textured.mp4](fighter_turntable_textured.mp4)
+Turntable video: [fighter_turntable_detailed.mp4](fighter_turntable_detailed.mp4)
 
 ## Features
 
-- **The fighter** — modelled from CSG and primitive shapes (~1,200 triangles), with procedurally
+- **The fighter** — modelled from CSG and primitive shapes (~1,900 triangles), with procedurally
   painted panel textures, bump-mapped vents/hatches/markings, two-tone cel lighting and
   screen-space ink outlines.
 - **Rolling-hills terrain** — 4 km noise-generated landscape with matching collision, regenerated
@@ -67,6 +67,7 @@ to play the game.
 
 ## Videos
 
-- `fighter_turntable_textured.mp4` — current look
+- `fighter_turntable_detailed.mp4` — current look (reshaped canopy, wings, engines and spine)
+- `fighter_turntable_textured.mp4` — textures and outlines on the earlier shape
 - `fighter_turntable_compare.mp4` — triangle optimisation before/after
 - `fighter_turntable.mp4`, `fighter_turntable_optimized.mp4` — earlier versions

@@ -6,9 +6,8 @@ func _initialize() -> void:
 	var fighter: Node3D = load("res://fighter/fighter.tscn").instantiate()
 	root.add_child(fighter)
 	# CSG meshes are built deferred; give them a couple of frames.
-	await process_frame
-	await process_frame
-	await process_frame
+	for i in 10:
+		await process_frame
 
 	var total_tris := 0
 	var total_verts := 0
@@ -22,11 +21,11 @@ func _initialize() -> void:
 		for node in nodes:
 			var meshes: Array = []
 			if node is CSGShape3D and node.is_root_shape():
-				var pair: Array = node.get_meshes()
-				if pair.size() >= 2 and pair[1]:
-					meshes.append(pair[1])
-					var t := _tris(pair[1])
-					by_kind["CSG"] += t
+				# bake_static_mesh() returns the final boolean result; get_meshes() can be stale.
+				var baked: ArrayMesh = node.bake_static_mesh()
+				if baked:
+					meshes.append(baked)
+					by_kind["CSG"] += _tris(baked)
 			elif node is MeshInstance3D and node.mesh:
 				meshes.append(node.mesh)
 				by_kind["Primitive"] += _tris(node.mesh)

@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://fighter/materials/canopy.gdshader" id="1_shader"]
+
+[resource]
+resource_name = "Canopy glass"
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/glass_color = Color(0.10980392, 0.13725491, 0.21960784, 1)
+shader_parameter/glass_metallic = 0.7
+shader_parameter/glass_roughness = 0.15
+shader_parameter/rim_amount = 0.4
+shader_parameter/bump_strength = 1.0
+shader_parameter/feature_count = 7
+shader_parameter/feature_center = PackedVector4Array(0, 1.2, -2.3, 0, 0, 1.2, -1.25, 0, 0, 1.1, -0.66, 0, 0, 0.8, -3.15, 0, 0, 1.45, -2, 0, 0, 1.02, -2, 0, 0, 1.5, -2, 0)
+shader_parameter/feature_size = PackedVector4Array(0.9, 0.5, 0.045, 0, 0.9, 0.5, 0.045, 0, 0.9, 0.6, 0.06, 0, 0.9, 0.3, 0.05, 0, 0.045, 0.25, 1.45, 0, 0.9, 0.035, 1.45, 0, 0.9, 0.03, 1.45, 0)
+shader_parameter/feature_color = PackedVector4Array(0.64, 0.67, 0.63, 1, 0.64, 0.67, 0.63, 1, 0.64, 0.67, 0.63, 1, 0.64, 0.67, 0.63, 1, 0.64, 0.67, 0.63, 1, 0.64, 0.67, 0.63, 1, 0.64, 0.67, 0.63, 1)

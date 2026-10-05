@@ -113,10 +113,10 @@ script = ExtResource("13_7madw")
 target = NodePath("../Model")
 
 [node name="ExhaustParticlesL" parent="Player" unique_id=2104294344 instance=ExtResource("14_xjf40")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3, 0.95, 2.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3, 1.1, 2.7)
 
 [node name="ExhaustParticlesR" parent="Player" unique_id=1066134553 instance=ExtResource("14_xjf40")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 0.95, 2.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 1.1, 2.7)
 
 [node name="ChaseCamera" type="Camera3D" parent="." unique_id=2086763168 node_paths=PackedStringArray("target")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 186, 376)
