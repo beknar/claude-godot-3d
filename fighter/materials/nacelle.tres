@@ -1,0 +1,26 @@
+[gd_resource type="ShaderMaterial" format=4 uid="uid://bpx3dkkvrqtfn"]
+
+[ext_resource type="Shader" uid="uid://cy3rfx5dla7fh" path="res://fighter/materials/nacelle.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://buc107y6qmowm" path="res://fighter/textures/nacelle_panels.png" id="2_l4n88"]
+
+[resource]
+resource_name = "Engine nacelle"
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/cel_threshold = 0.05
+shader_parameter/cel_softness = 0.03
+shader_parameter/cel_light_scale = 0.3
+shader_parameter/body_color = Color(0.6392157, 0.6745098, 0.6313726, 1)
+shader_parameter/inset_color = Color(0.41960785, 0.47058824, 0.49803922, 1)
+shader_parameter/band_color = Color(0.3529412, 0.38431373, 0.4117647, 1)
+shader_parameter/line_color = Color(0.07058824, 0.078431375, 0.09411765, 1)
+shader_parameter/marking_color = Color(0.95, 0.55, 0.15, 1)
+shader_parameter/roughness_value = 0.3
+shader_parameter/metallic_value = 0.1
+shader_parameter/bands = PackedVector4Array(-1.3375, -0.8875, 0.025, 0, -0.1125, 0.1875, 0.02, 0, 0.9625, 1.2125, 0.02, 0)
+shader_parameter/band_count = 3
+shader_parameter/relief_depth = 0.05
+shader_parameter/groove_depth = 0.012
+shader_parameter/bump_strength = 1.0
+shader_parameter/panel_map = ExtResource("2_l4n88")
+shader_parameter/tile_length = 2.7

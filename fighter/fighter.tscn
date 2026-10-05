@@ -1,0 +1,323 @@
+[gd_scene format=3 uid="uid://cwbcvf326uln3"]
+
+[ext_resource type="Material" path="res://fighter/materials/hull_fuselage.tres" id="1_yed1o"]
+[ext_resource type="Material" path="res://fighter/materials/canopy_frames.tres" id="2_yed1o"]
+[ext_resource type="Material" uid="uid://b04f5xquwuxoi" path="res://fighter/materials/hull_dark.tres" id="3_dhc0e"]
+[ext_resource type="Material" path="res://fighter/materials/hull_wingroot.tres" id="3_ybngi"]
+[ext_resource type="Material" path="res://fighter/materials/hull_arm.tres" id="4_1i8r6"]
+[ext_resource type="Material" path="res://fighter/materials/gunmetal.tres" id="4_jqwl7"]
+[ext_resource type="Material" uid="uid://bpx3dkkvrqtfn" path="res://fighter/materials/nacelle.tres" id="7_7jsxi"]
+[ext_resource type="Material" path="res://fighter/materials/nozzle_glow.tres" id="7_uitlt"]
+[ext_resource type="Material" uid="uid://ubtpsys5g2tm" path="res://fighter/materials/exhaust.tres" id="8_68nov"]
+[ext_resource type="Material" path="res://fighter/materials/intake_grille.tres" id="8_q2ryx"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_25q6q"]
+size = Vector3(0.55, 0.42, 0.9)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_q8eeb"]
+top_radius = 0.13
+bottom_radius = 0.13
+height = 0.6
+radial_segments = 12
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qkdoo"]
+top_radius = 0.065
+bottom_radius = 0.065
+height = 1.2
+radial_segments = 10
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bdru7"]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.28
+radial_segments = 10
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_mok6n"]
+top_radius = 0.72
+bottom_radius = 0.72
+height = 2.675
+radial_segments = 16
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7do8v"]
+top_radius = 0.52
+bottom_radius = 0.72
+height = 0.6
+radial_segments = 16
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qbd0n"]
+top_radius = 0.68
+bottom_radius = 0.68
+height = 0.05
+radial_segments = 16
+rings = 0
+cap_top = false
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_f57ta"]
+top_radius = 0.42
+bottom_radius = 0.42
+height = 0.05
+radial_segments = 16
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3dois"]
+top_radius = 0.04
+bottom_radius = 0.42
+height = 6.0
+radial_segments = 16
+rings = 0
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="BoxMesh" id="BoxMesh_u78l8"]
+size = Vector3(0.55, 0.4, 2.2)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6i7i8"]
+top_radius = 0.72
+bottom_radius = 0.72
+height = 2.675
+radial_segments = 16
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_uf2hx"]
+top_radius = 0.68
+bottom_radius = 0.68
+height = 0.05
+radial_segments = 16
+rings = 0
+cap_top = false
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_p1mcj"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 1.0
+radial_segments = 8
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6iqsn"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 1.0
+radial_segments = 8
+rings = 0
+
+[node name="Fighter" type="Node3D" unique_id=1090602961]
+
+[node name="Fuselage" type="CSGCombiner3D" parent="." unique_id=158070005]
+
+[node name="SideProfile" type="CSGPolygon3D" parent="Fuselage" unique_id=1864174868]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.5, 0, 0)
+polygon = PackedVector2Array(6.2, -0.05, 6.2, 0.25, 4.5, 0.45, 2.2, 0.75, -0.5, 0.95, -3.2, 0.85, -3.4, 0.2, -3.4, -0.45, -1, -0.6, 3.5, -0.35, 5.5, -0.15)
+depth = 3.0
+material = ExtResource("1_yed1o")
+
+[node name="TopProfile" type="CSGPolygon3D" parent="Fuselage" unique_id=1448216432]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1.2, 0)
+operation = 1
+polygon = PackedVector2Array(-0.3, 6.2, 0.3, 6.2, 0.75, 4.6, 1.1, 2, 1.25, -1, 1.3, -3.4, -1.3, -3.4, -1.25, -1, -1.1, 2, -0.75, 4.6)
+depth = 2.0
+material = ExtResource("1_yed1o")
+
+[node name="FrontProfile" type="CSGPolygon3D" parent="Fuselage" unique_id=871638640]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.5)
+operation = 1
+polygon = PackedVector2Array(-1.3, -0.3, -0.9, -0.65, 0.9, -0.65, 1.3, -0.3, 1.3, 0.4, 0.6, 1, -0.6, 1, -1.3, 0.4)
+depth = 10.0
+material = ExtResource("1_yed1o")
+
+[node name="Canopy" type="CSGCombiner3D" parent="." unique_id=864760132]
+
+[node name="SideProfile" type="CSGPolygon3D" parent="Canopy" unique_id=1854847405]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.65, 0, 0)
+polygon = PackedVector2Array(3, 0.62, 1.6, 1.28, 0.3, 1.38, -0.25, 1.1, -0.25, 0.6)
+depth = 1.3
+material = ExtResource("2_yed1o")
+
+[node name="TopProfile" type="CSGPolygon3D" parent="Canopy" unique_id=1123452722]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1.5, 0)
+operation = 1
+polygon = PackedVector2Array(-0.15, 3, 0.15, 3, 0.65, 1.6, 0.6, -0.25, -0.6, -0.25, -0.65, 1.6)
+material = ExtResource("2_yed1o")
+
+[node name="FrontProfile" type="CSGPolygon3D" parent="Canopy" unique_id=1242962314]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+operation = 1
+polygon = PackedVector2Array(-0.65, 0.5, 0.65, 0.5, 0.65, 1, 0.32, 1.42, -0.32, 1.42, -0.65, 1)
+depth = 5.0
+material = ExtResource("2_yed1o")
+
+[node name="WingRoot" type="CSGPolygon3D" parent="." unique_id=696368173]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.25, 0)
+polygon = PackedVector2Array(-1, 1, 1, 1, 4.3, -0.8, 4.6, -3.3, -4.6, -3.3, -4.3, -0.8)
+depth = 0.45
+material = ExtResource("3_ybngi")
+
+[node name="ArmL" type="CSGCombiner3D" parent="." unique_id=954888470]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4, 0, 0)
+
+[node name="SideProfile" type="CSGPolygon3D" parent="ArmL" unique_id=1973038680]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.75, 0, 0)
+polygon = PackedVector2Array(5.4, -0.15, 5.4, 0.25, 4.6, 0.35, -1, 0.55, -3.5, 0.5, -3.5, -0.35, -1, -0.4, 4.6, -0.2)
+depth = 1.5
+material = ExtResource("4_1i8r6")
+
+[node name="TopProfile" type="CSGPolygon3D" parent="ArmL" unique_id=61719126]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.7, 0)
+operation = 1
+polygon = PackedVector2Array(-0.3, 5.4, 0.3, 5.4, 0.45, 4.6, 0.75, -1, 0.75, -3.5, -0.75, -3.5, -0.75, -1, -0.45, 4.6)
+depth = 1.2
+material = ExtResource("4_1i8r6")
+
+[node name="FrontProfile" type="CSGPolygon3D" parent="ArmL" unique_id=293341895]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+operation = 1
+polygon = PackedVector2Array(-0.75, -0.28, 0.75, -0.28, 0.75, 0.12, 0.22, 0.6, -0.22, 0.6, -0.75, 0.12)
+depth = 10.0
+material = ExtResource("4_1i8r6")
+
+[node name="TipBlock" type="MeshInstance3D" parent="ArmL" unique_id=479788291]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -5.05)
+material_override = ExtResource("3_dhc0e")
+mesh = SubResource("BoxMesh_25q6q")
+
+[node name="CannonHousing" type="MeshInstance3D" parent="ArmL" unique_id=1399732479]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.05, -5.75)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_q8eeb")
+
+[node name="CannonBarrel" type="MeshInstance3D" parent="ArmL" unique_id=1396410373]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.05, -6.5)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_qkdoo")
+
+[node name="CannonMuzzle" type="MeshInstance3D" parent="ArmL" unique_id=1443744272]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.05, -7.1)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_bdru7")
+
+[node name="ArmR" type="CSGCombiner3D" parent="." unique_id=488294829]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4, 0, 0)
+
+[node name="SideProfile" type="CSGPolygon3D" parent="ArmR" unique_id=729920032]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.75, 0, 0)
+polygon = PackedVector2Array(5.4, -0.15, 5.4, 0.25, 4.6, 0.35, -1, 0.55, -3.5, 0.5, -3.5, -0.35, -1, -0.4, 4.6, -0.2)
+depth = 1.5
+material = ExtResource("4_1i8r6")
+
+[node name="TopProfile" type="CSGPolygon3D" parent="ArmR" unique_id=229066015]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.7, 0)
+operation = 1
+polygon = PackedVector2Array(-0.3, 5.4, 0.3, 5.4, 0.45, 4.6, 0.75, -1, 0.75, -3.5, -0.75, -3.5, -0.75, -1, -0.45, 4.6)
+depth = 1.2
+material = ExtResource("4_1i8r6")
+
+[node name="FrontProfile" type="CSGPolygon3D" parent="ArmR" unique_id=273316793]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+operation = 1
+polygon = PackedVector2Array(-0.75, -0.28, 0.75, -0.28, 0.75, 0.12, 0.22, 0.6, -0.22, 0.6, -0.75, 0.12)
+depth = 10.0
+material = ExtResource("4_1i8r6")
+
+[node name="TipBlock" type="MeshInstance3D" parent="ArmR" unique_id=1219665844]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -5.05)
+material_override = ExtResource("3_dhc0e")
+mesh = SubResource("BoxMesh_25q6q")
+
+[node name="CannonHousing" type="MeshInstance3D" parent="ArmR" unique_id=1299415319]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.05, -5.75)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_q8eeb")
+
+[node name="CannonBarrel" type="MeshInstance3D" parent="ArmR" unique_id=298567076]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.05, -6.5)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_qkdoo")
+
+[node name="CannonMuzzle" type="MeshInstance3D" parent="ArmR" unique_id=428342434]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.05, -7.1)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_bdru7")
+
+[node name="EngineL" type="Node3D" parent="." unique_id=1969557604]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3, 0.95, 0.8)
+
+[node name="Body" type="MeshInstance3D" parent="EngineL" unique_id=1067348834]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -0.1375)
+material_override = ExtResource("7_7jsxi")
+mesh = SubResource("CylinderMesh_mok6n")
+
+[node name="Nozzle" type="MeshInstance3D" parent="EngineL" unique_id=1323257382]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 1.5)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_7do8v")
+
+[node name="Intake" type="MeshInstance3D" parent="EngineL" unique_id=660953591]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -1.49)
+material_override = ExtResource("8_q2ryx")
+mesh = SubResource("CylinderMesh_qbd0n")
+
+[node name="NozzleCore" type="MeshInstance3D" parent="EngineL" unique_id=59563190]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 1.81)
+material_override = ExtResource("7_uitlt")
+mesh = SubResource("CylinderMesh_f57ta")
+
+[node name="ExhaustTrail" type="MeshInstance3D" parent="EngineL" unique_id=1261125470]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 4.83)
+material_override = ExtResource("8_68nov")
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_3dois")
+
+[node name="Pylon" type="MeshInstance3D" parent="EngineL" unique_id=1233044368]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.62, 0.4)
+material_override = ExtResource("3_dhc0e")
+mesh = SubResource("BoxMesh_u78l8")
+
+[node name="EngineR" type="Node3D" parent="." unique_id=1432255559]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 0.95, 0.8)
+
+[node name="Body" type="MeshInstance3D" parent="EngineR" unique_id=1592226968]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -0.1375)
+material_override = ExtResource("7_7jsxi")
+mesh = SubResource("CylinderMesh_6i7i8")
+
+[node name="Nozzle" type="MeshInstance3D" parent="EngineR" unique_id=1941384536]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 1.5)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_7do8v")
+
+[node name="Intake" type="MeshInstance3D" parent="EngineR" unique_id=1337213243]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -1.49)
+material_override = ExtResource("8_q2ryx")
+mesh = SubResource("CylinderMesh_uf2hx")
+
+[node name="NozzleCore" type="MeshInstance3D" parent="EngineR" unique_id=484255245]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 1.81)
+material_override = ExtResource("7_uitlt")
+mesh = SubResource("CylinderMesh_f57ta")
+
+[node name="ExhaustTrail" type="MeshInstance3D" parent="EngineR" unique_id=617655484]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 4.83)
+material_override = ExtResource("8_68nov")
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_3dois")
+
+[node name="Pylon" type="MeshInstance3D" parent="EngineR" unique_id=203587725]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.62, 0.4)
+material_override = ExtResource("3_dhc0e")
+mesh = SubResource("BoxMesh_u78l8")
+
+[node name="Details" type="Node3D" parent="." unique_id=882185968]
+
+[node name="NoseGunL" type="MeshInstance3D" parent="Details" unique_id=110386074]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.2, -0.02, -6.4)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_p1mcj")
+
+[node name="NoseGunR" type="MeshInstance3D" parent="Details" unique_id=1001557785]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.2, -0.02, -6.4)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_6iqsn")

@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3]
+
+[sub_resource type="Gradient" id="Gradient_puff_shape"]
+offsets = PackedFloat32Array(0, 0.45, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.55, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_puff"]
+gradient = SubResource("Gradient_puff_shape")
+width = 64
+height = 64
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_puff"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = SubResource("GradientTexture2D_puff")
+billboard_mode = 3
+billboard_keep_scale = true
+disable_receive_shadows = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_puff"]
+material = SubResource("StandardMaterial3D_puff")
+size = Vector2(1, 1)
+
+[sub_resource type="Curve" id="Curve_puff_size"]
+max_value = 2.0
+_data = [Vector2(0, 0.55), 0.0, 1.4, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1.6), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_puff_color"]
+offsets = PackedFloat32Array(0, 0.15, 0.55, 1)
+colors = PackedColorArray(0.92, 0.97, 1, 1, 0.45, 0.72, 1, 0.9, 0.2, 0.45, 1, 0.45, 0.15, 0.3, 0.9, 0)
+
+[node name="ExhaustParticles" type="CPUParticles3D"]
+cast_shadow = 0
+amount = 110
+lifetime = 0.35
+local_coords = false
+mesh = SubResource("QuadMesh_puff")
+emission_shape = 1
+emission_sphere_radius = 0.22
+direction = Vector3(0, 0, 1)
+spread = 4.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 14.0
+initial_velocity_max = 20.0
+damping_min = 5.0
+damping_max = 8.0
+scale_amount_min = 1.1
+scale_amount_max = 1.5
+scale_amount_curve = SubResource("Curve_puff_size")
+color_ramp = SubResource("Gradient_puff_color")

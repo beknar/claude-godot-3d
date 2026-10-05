@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://ubtpsys5g2tm"]
+
+[ext_resource type="Shader" uid="uid://cx73x2ii7qlc4" path="res://fighter/materials/exhaust.gdshader" id="1_shader"]
+
+[resource]
+render_priority = 1
+shader = ExtResource("1_shader")
+shader_parameter/color = Color(0.3, 0.55, 1, 1)
+shader_parameter/intensity = 4.0
+shader_parameter/flip = true

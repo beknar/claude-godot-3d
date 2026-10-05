@@ -1,0 +1,26 @@
+[gd_resource type="ShaderMaterial" format=4 uid="uid://b04f5xquwuxoi"]
+
+[ext_resource type="Shader" uid="uid://bynux7rn1x6d6" path="res://fighter/materials/hull_panels.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://cag86kk08a2ne" path="res://fighter/textures/hull_panels.png" id="2_ydayv"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/cel_threshold = 0.05
+shader_parameter/cel_softness = 0.03
+shader_parameter/cel_light_scale = 0.3
+shader_parameter/feature_count = 0
+shader_parameter/feature_center = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/feature_size = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/feature_color = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/base_color = Color(0.46, 0.5, 0.53, 1)
+shader_parameter/plate_dark = Color(0.33, 0.36, 0.4, 1)
+shader_parameter/line_color = Color(0.07058824, 0.078431375, 0.09411765, 1)
+shader_parameter/marking_color = Color(0.85, 0.42, 0.4, 1)
+shader_parameter/roughness_value = 0.3
+shader_parameter/metallic_value = 0.1
+shader_parameter/panel_map = ExtResource("2_ydayv")
+shader_parameter/tile_size = 6.0
+shader_parameter/ink_strength = 1.0
+shader_parameter/relief_depth = 0.05
+shader_parameter/bump_strength = 1.0

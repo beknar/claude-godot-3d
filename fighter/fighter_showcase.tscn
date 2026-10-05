@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://5mf8pmsd6fib"]
+
+[ext_resource type="PackedScene" path="res://game/fx/ink_outline.tscn" id="2_7jvwy"]
+[ext_resource type="PackedScene" uid="uid://cwbcvf326uln3" path="res://fighter/fighter.tscn" id="2_qspin"]
+[ext_resource type="Environment" uid="uid://x1obhxoy7jpr" path="res://fighter/space_env.tres" id="11_avini"]
+
+[node name="FighterShowcase" type="Node3D" unique_id=1780896916]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=422476811]
+environment = ExtResource("11_avini")
+
+[node name="KeyLight" type="DirectionalLight3D" parent="." unique_id=1658763827]
+transform = Transform3D(0.7193398, -0.4825503, 0.49969542, 0, 0.7193398, 0.6946584, -0.6946584, -0.49969542, 0.51744974, 0, 0, 0)
+light_color = Color(1, 0.95686275, 0.9019608, 1)
+light_energy = 1.05
+shadow_enabled = true
+
+[node name="FillLight" type="DirectionalLight3D" parent="." unique_id=584557713]
+transform = Transform3D(0.76604444, 0.3686878, 0.52654076, 0, 0.81915206, -0.57357645, -0.6427876, 0.43938506, 0.62750685, 0, 0, 0)
+light_color = Color(0.43529412, 0.54901963, 1, 1)
+light_energy = 0.3
+
+[node name="ShowcaseCamera" type="Camera3D" parent="." unique_id=1595077065]
+transform = Transform3D(-0.66000175, 0.37824076, -0.64910066, 0, 0.8640113, 0.50347245, 0.7512641, 0.3322927, -0.57024896, -11, 8.5, -10)
+current = true
+fov = 42.0
+near = 2.0
+
+[node name="InkOutline" parent="ShowcaseCamera" unique_id=1417412987 instance=ExtResource("2_7jvwy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Fighter" parent="." unique_id=1090602961 instance=ExtResource("2_qspin")]

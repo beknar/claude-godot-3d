@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Shader" path="res://game/fx/ink_outline.gdshader" id="1_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ink"]
+render_priority = 10
+shader = ExtResource("1_shader")
+
+[sub_resource type="QuadMesh" id="QuadMesh_screen"]
+size = Vector2(2, 2)
+
+[node name="InkOutline" type="MeshInstance3D"]
+position = Vector3(0, 0, -1)
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+mesh = SubResource("QuadMesh_screen")
+material_override = SubResource("ShaderMaterial_ink")

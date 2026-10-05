@@ -1,0 +1,145 @@
+[gd_scene format=3 uid="uid://c7yvplej0ncej"]
+
+[ext_resource type="Script" uid="uid://dc363su32k7bj" path="res://game/terrain/terrain_generator.gd" id="2_13o1r"]
+[ext_resource type="Material" uid="uid://b1cnbu6d220k3" path="res://game/terrain/terrain_material.tres" id="3_mki14"]
+[ext_resource type="Script" uid="uid://dk2rfnr6uw4n7" path="res://game/fighter_controller.gd" id="4_x1hdd"]
+[ext_resource type="Script" uid="uid://co3xh2pi5w57" path="res://game/fighter_audio.gd" id="5_3yh5a"]
+[ext_resource type="PackedScene" uid="uid://cwbcvf326uln3" path="res://fighter/fighter.tscn" id="5_6lgp5"]
+[ext_resource type="Script" uid="uid://p3me762545oo" path="res://game/chase_camera.gd" id="6_5wlli"]
+[ext_resource type="AudioStream" uid="uid://2chwaal4uxtf" path="res://game/audio/engine_loop.wav" id="6_bvenf"]
+[ext_resource type="AudioStream" uid="uid://gqq313h3mc14" path="res://game/audio/wind_loop.wav" id="7_7madw"]
+[ext_resource type="AudioStream" uid="uid://cdesnndouryvl" path="res://game/audio/afterburner_loop.wav" id="8_xjf40"]
+[ext_resource type="AudioStream" uid="uid://c6gv1ql7g05gn" path="res://game/audio/warning_beep_loop.wav" id="9_03iqa"]
+[ext_resource type="AudioStream" uid="uid://c8mqvdl8l5yga" path="res://game/audio/boost_ignite.wav" id="10_f3osb"]
+[ext_resource type="AudioStream" uid="uid://blqap2fwdx8wl" path="res://game/audio/airbrake.wav" id="11_0b3mw"]
+[ext_resource type="AudioStream" uid="uid://bjexto6klbsyg" path="res://game/audio/boost_empty.wav" id="12_3r1je"]
+[ext_resource type="Script" uid="uid://cawn27w1icyjm" path="res://game/fighter_livery.gd" id="13_7madw"]
+[ext_resource type="PackedScene" path="res://game/fx/exhaust_particles.tscn" id="14_xjf40"]
+[ext_resource type="PackedScene" path="res://game/fx/ink_outline.tscn" id="16_xjf40"]
+[ext_resource type="Material" path="res://game/fx/ink_outline_flight.tres" id="17_03iqa"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p75vj"]
+sky_top_color = Color(0.25882354, 0.4509804, 0.78039217, 1)
+sky_horizon_color = Color(0.6901961, 0.76862746, 0.87058824, 1)
+ground_bottom_color = Color(0.6901961, 0.76862746, 0.87058824, 1)
+ground_horizon_color = Color(0.6901961, 0.76862746, 0.87058824, 1)
+
+[sub_resource type="Sky" id="Sky_7meau"]
+sky_material = SubResource("ProceduralSkyMaterial_p75vj")
+
+[sub_resource type="Environment" id="Environment_13o1r"]
+background_mode = 2
+sky = SubResource("Sky_7meau")
+ambient_light_source = 3
+ambient_light_energy = 0.45
+tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 0.5
+glow_hdr_threshold = 1.3
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.6901961, 0.76862746, 0.87058824, 1)
+fog_density = 1.0
+fog_sky_affect = 0.0
+fog_depth_curve = 1.2
+fog_depth_begin = 200.0
+fog_depth_end = 850.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jrhuy"]
+size = Vector3(10.4, 2.4, 10)
+
+[node name="FlightLevel" type="Node3D" unique_id=73692720]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1743754194]
+environment = SubResource("Environment_13o1r")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1160566812]
+transform = Transform3D(0.81915206, 0.35312894, -0.45198444, 0, 0.7880108, 0.6156615, 0.57357645, -0.5043204, 0.64550066, 0, 0, 0)
+light_color = Color(1, 0.9529412, 0.8745098, 1)
+light_energy = 1.15
+shadow_enabled = true
+directional_shadow_max_distance = 400.0
+
+[node name="Terrain" type="Node3D" parent="." unique_id=1728095349]
+script = ExtResource("2_13o1r")
+size = 4000.0
+resolution = 320
+hill_height = 160.0
+material = ExtResource("3_mki14")
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1400646545 node_paths=PackedStringArray("terrain", "model", "hud_label")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 180, 350)
+script = ExtResource("4_x1hdd")
+terrain = NodePath("../Terrain")
+boundary_radius = 1200.0
+model = NodePath("Model")
+hud_label = NodePath("../HUD/Status")
+
+[node name="Model" parent="Player" unique_id=1090602961 instance=ExtResource("5_6lgp5")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=463768822]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -2.3)
+shape = SubResource("BoxShape3D_jrhuy")
+
+[node name="Audio" type="Node" parent="Player" unique_id=880837460 node_paths=PackedStringArray("fighter")]
+script = ExtResource("5_3yh5a")
+fighter = NodePath("..")
+
+[node name="Engine" type="AudioStreamPlayer" parent="Player/Audio" unique_id=1378544995]
+stream = ExtResource("6_bvenf")
+
+[node name="Wind" type="AudioStreamPlayer" parent="Player/Audio" unique_id=2057550171]
+stream = ExtResource("7_7madw")
+
+[node name="Afterburner" type="AudioStreamPlayer" parent="Player/Audio" unique_id=369500105]
+stream = ExtResource("8_xjf40")
+
+[node name="Warning" type="AudioStreamPlayer" parent="Player/Audio" unique_id=1564292368]
+stream = ExtResource("9_03iqa")
+volume_db = -4.0
+
+[node name="BoostIgnite" type="AudioStreamPlayer" parent="Player/Audio" unique_id=996342883]
+stream = ExtResource("10_f3osb")
+
+[node name="Airbrake" type="AudioStreamPlayer" parent="Player/Audio" unique_id=664242923]
+stream = ExtResource("11_0b3mw")
+
+[node name="BoostEmpty" type="AudioStreamPlayer" parent="Player/Audio" unique_id=1417848920]
+stream = ExtResource("12_3r1je")
+volume_db = -3.0
+
+[node name="Livery" type="Node" parent="Player" unique_id=435343746 node_paths=PackedStringArray("target")]
+script = ExtResource("13_7madw")
+target = NodePath("../Model")
+
+[node name="ExhaustParticlesL" parent="Player" unique_id=2104294344 instance=ExtResource("14_xjf40")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3, 0.95, 2.7)
+
+[node name="ExhaustParticlesR" parent="Player" unique_id=1066134553 instance=ExtResource("14_xjf40")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 0.95, 2.7)
+
+[node name="ChaseCamera" type="Camera3D" parent="." unique_id=2086763168 node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 186, 376)
+current = true
+near = 1.0
+far = 3000.0
+script = ExtResource("6_5wlli")
+target = NodePath("../Player")
+offset = Vector3(0, 5, 20)
+look_ahead = 25.0
+
+[node name="InkOutline" parent="ChaseCamera" unique_id=38905322 instance=ExtResource("16_xjf40")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+material_override = ExtResource("17_03iqa")
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1785141624]
+
+[node name="Status" type="Label" parent="HUD" unique_id=1241572180]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 17.0
+offset_bottom = 35.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18
+text = "W/S pitch   A/D turn   Shift boost   Space brake"

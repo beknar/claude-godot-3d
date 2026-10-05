@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://bnlg536j0jbva"]
+
+[ext_resource type="Script" uid="uid://ngx7rxjmrfm6" path="res://fighter/turntable.gd" id="1_22fks"]
+[ext_resource type="Environment" uid="uid://x1obhxoy7jpr" path="res://fighter/space_env.tres" id="2_da1ju"]
+[ext_resource type="PackedScene" uid="uid://cwbcvf326uln3" path="res://fighter/fighter.tscn" id="3_kdssv"]
+[ext_resource type="PackedScene" path="res://game/fx/ink_outline.tscn" id="4_da1ju"]
+
+[node name="FighterTurntable" type="Node3D" unique_id=1028054270 node_paths=PackedStringArray("spin", "tilt")]
+script = ExtResource("1_22fks")
+spin = NodePath("Tilt/Spin")
+tilt = NodePath("Tilt")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1299625744]
+environment = ExtResource("2_da1ju")
+
+[node name="KeyLight" type="DirectionalLight3D" parent="." unique_id=1995458629]
+transform = Transform3D(-4.371139e-08, -0.70710677, 0.70710677, 0, 0.70710677, 0.70710677, -1, 3.090862e-08, -3.090862e-08, 0, 0, 0)
+light_color = Color(1, 0.95686275, 0.9019608, 1)
+light_energy = 1.1
+shadow_enabled = true
+
+[node name="FillLight" type="DirectionalLight3D" parent="." unique_id=270590458]
+transform = Transform3D(0.49999997, 0.29619813, 0.8137977, 0, 0.9396926, -0.34202012, -0.86602545, 0.17101005, 0.46984628, 0, 0, 0)
+light_color = Color(0.43529412, 0.54901963, 1, 1)
+light_energy = 0.35
+
+[node name="RimLight" type="DirectionalLight3D" parent="." unique_id=29946502]
+transform = Transform3D(-0.9848077, -0.073386945, 0.1573788, 0, 0.90630776, 0.42261827, -0.1736483, 0.41619775, -0.8925389, 0, 0, 0)
+light_color = Color(0.8117647, 0.8784314, 1, 1)
+light_energy = 0.9
+
+[node name="Tilt" type="Node3D" parent="." unique_id=416627175]
+
+[node name="Spin" type="Node3D" parent="Tilt" unique_id=1966773488]
+transform = Transform3D(-0.81915206, 0, 0.57357645, 0, 1, 0, -0.57357645, 0, -0.81915206, 0, 0, 0)
+
+[node name="Fighter" parent="Tilt/Spin" unique_id=1090602961 instance=ExtResource("3_kdssv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 1.6)
+
+[node name="Camera" type="Camera3D" parent="." unique_id=470611102]
+transform = Transform3D(1, 0, 0, 0, 0.9788674, 0.20449606, 0, -0.20449606, 0.9788674, 0, 4.4, 21)
+current = true
+fov = 30.0
+near = 4.0
+
+[node name="InkOutline" parent="Camera" unique_id=606244641 instance=ExtResource("4_da1ju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
