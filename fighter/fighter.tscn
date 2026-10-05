@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cwbcvf326uln3"]
 
+[ext_resource type="Material" uid="uid://cln48sxncldjw" path="res://fighter/materials/hull_light.tres" id="1_avini"]
 [ext_resource type="Material" path="res://fighter/materials/hull_body.tres" id="1_yed1o"]
 [ext_resource type="Material" path="res://fighter/materials/canopy_glass.tres" id="2_1ba1b"]
 [ext_resource type="Material" path="res://fighter/materials/hull_root.tres" id="3_cptg2"]
@@ -11,6 +12,7 @@
 [ext_resource type="Material" uid="uid://ubtpsys5g2tm" path="res://fighter/materials/exhaust.tres" id="8_68nov"]
 [ext_resource type="Material" uid="uid://cgkkh6qivyj1r" path="res://fighter/materials/intake_grille.tres" id="8_q2ryx"]
 [ext_resource type="Material" path="res://fighter/materials/hull_chin.tres" id="11_cptg2"]
+[ext_resource type="Material" path="res://fighter/materials/signal_red.tres" id="13_1i8r6"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_25q6q"]
 size = Vector3(0.55, 0.42, 0.9)
@@ -74,11 +76,29 @@ cap_bottom = false
 [sub_resource type="BoxMesh" id="BoxMesh_uf2hx"]
 size = Vector3(0.55, 0.6, 2.2)
 
-[sub_resource type="TorusMesh" id="TorusMesh_138xj"]
-inner_radius = 0.7
-outer_radius = 0.97
+[sub_resource type="TorusMesh" id="TorusMesh_1i8r6"]
+inner_radius = 0.68
+outer_radius = 1.02
 rings = 16
-ring_segments = 4
+ring_segments = 6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_uf2hx"]
+top_radius = 1.07
+bottom_radius = 0.96
+height = 0.34
+radial_segments = 16
+rings = 0
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_siumf"]
+top_radius = 0.855
+bottom_radius = 1.07
+height = 0.62
+radial_segments = 16
+rings = 0
+cap_top = false
+cap_bottom = false
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_qjpmv"]
 top_radius = 0.8
@@ -117,6 +137,30 @@ cap_bottom = false
 
 [sub_resource type="BoxMesh" id="BoxMesh_siumf"]
 size = Vector3(0.55, 0.6, 2.2)
+
+[sub_resource type="TorusMesh" id="TorusMesh_182tw"]
+inner_radius = 0.68
+outer_radius = 1.02
+rings = 16
+ring_segments = 6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fyl5f"]
+top_radius = 1.07
+bottom_radius = 0.96
+height = 0.34
+radial_segments = 16
+rings = 0
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_53uqm"]
+top_radius = 0.855
+bottom_radius = 1.07
+height = 0.62
+radial_segments = 16
+rings = 0
+cap_top = false
+cap_bottom = false
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_p1mcj"]
 top_radius = 0.05
@@ -163,6 +207,71 @@ top_radius = 0.1
 bottom_radius = 0.1
 height = 0.95
 radial_segments = 8
+rings = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_la61k"]
+size = Vector3(0.26, 0.2, 1.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2jnnw"]
+size = Vector3(0.26, 0.2, 1.1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_jg6gk"]
+top_radius = 0.1
+bottom_radius = 0.12
+height = 0.1
+radial_segments = 8
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_kagpm"]
+top_radius = 0.1
+bottom_radius = 0.12
+height = 0.1
+radial_segments = 8
+rings = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_dsdii"]
+size = Vector3(0.24, 0.12, 0.42)
+
+[sub_resource type="BoxMesh" id="BoxMesh_etgji"]
+size = Vector3(0.24, 0.12, 0.42)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_onut0"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 1.9
+radial_segments = 6
+rings = 0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_kjh1g"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 1.9
+radial_segments = 6
+rings = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_eb84o"]
+size = Vector3(0.32, 0.34, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2onak"]
+size = Vector3(0.32, 0.34, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yewfg"]
+size = Vector3(0.22, 0.1, 0.32)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qpi55"]
+size = Vector3(0.22, 0.1, 0.32)
+
+[sub_resource type="BoxMesh" id="BoxMesh_if6d2"]
+size = Vector3(0.08, 0.07, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_buflg"]
+size = Vector3(0.08, 0.07, 0.12)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hydbk"]
+top_radius = 0.015
+bottom_radius = 0.03
+height = 0.55
+radial_segments = 6
 rings = 0
 
 [node name="Fighter" type="Node3D" unique_id=1090602961]
@@ -338,9 +447,19 @@ material_override = ExtResource("3_dhc0e")
 mesh = SubResource("BoxMesh_uf2hx")
 
 [node name="IntakeLip" type="MeshInstance3D" parent="EngineL" unique_id=1378770652]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -1.45)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -1.46)
 material_override = ExtResource("3_dhc0e")
-mesh = SubResource("TorusMesh_138xj")
+mesh = SubResource("TorusMesh_1i8r6")
+
+[node name="CowlFront" type="MeshInstance3D" parent="EngineL" unique_id=266636143]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -1.29)
+material_override = ExtResource("1_avini")
+mesh = SubResource("CylinderMesh_uf2hx")
+
+[node name="CowlRear" type="MeshInstance3D" parent="EngineL" unique_id=1195346510]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -0.81)
+material_override = ExtResource("1_avini")
+mesh = SubResource("CylinderMesh_siumf")
 
 [node name="EngineR" type="Node3D" parent="." unique_id=1432255559]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 1.1, 0.8)
@@ -377,9 +496,19 @@ material_override = ExtResource("3_dhc0e")
 mesh = SubResource("BoxMesh_siumf")
 
 [node name="IntakeLip" type="MeshInstance3D" parent="EngineR" unique_id=326275653]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -1.45)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -1.46)
 material_override = ExtResource("3_dhc0e")
-mesh = SubResource("TorusMesh_138xj")
+mesh = SubResource("TorusMesh_182tw")
+
+[node name="CowlFront" type="MeshInstance3D" parent="EngineR" unique_id=274227532]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -1.29)
+material_override = ExtResource("1_avini")
+mesh = SubResource("CylinderMesh_fyl5f")
+
+[node name="CowlRear" type="MeshInstance3D" parent="EngineR" unique_id=1787635546]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -0.81)
+material_override = ExtResource("1_avini")
+mesh = SubResource("CylinderMesh_53uqm")
 
 [node name="Details" type="Node3D" parent="." unique_id=882185968]
 
@@ -487,3 +616,80 @@ operation = 1
 polygon = PackedVector2Array(-0.6, 0, 0.6, 0, 0.6, -0.5, 0.4, -0.7, -0.4, -0.7, -0.6, -0.5)
 depth = 4.0
 material = ExtResource("11_cptg2")
+
+[node name="CockpitDetail" type="Node3D" parent="." unique_id=1584944256]
+
+[node name="ConsoleL" type="MeshInstance3D" parent="CockpitDetail" unique_id=21019592]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.98, 0.7, -2.1)
+material_override = ExtResource("3_dhc0e")
+mesh = SubResource("BoxMesh_la61k")
+
+[node name="ConsoleR" type="MeshInstance3D" parent="CockpitDetail" unique_id=1573725451]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.98, 0.7, -2.1)
+material_override = ExtResource("3_dhc0e")
+mesh = SubResource("BoxMesh_2jnnw")
+
+[node name="PodL" type="MeshInstance3D" parent="CockpitDetail" unique_id=844280213]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.98, 0.85, -2.35)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_jg6gk")
+
+[node name="PodR" type="MeshInstance3D" parent="CockpitDetail" unique_id=79089419]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.98, 0.85, -1.85)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_kagpm")
+
+[node name="VentBlockL" type="MeshInstance3D" parent="CockpitDetail" unique_id=1861951475]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.64, -3.05)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("BoxMesh_dsdii")
+
+[node name="VentBlockR" type="MeshInstance3D" parent="CockpitDetail" unique_id=2022284287]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.64, -3.05)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("BoxMesh_etgji")
+
+[node name="SillPipeL" type="MeshInstance3D" parent="CockpitDetail" unique_id=781442284]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.85, 0.6, -1.95)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_onut0")
+
+[node name="SillPipeR" type="MeshInstance3D" parent="CockpitDetail" unique_id=365664831]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.85, 0.6, -1.95)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_kjh1g")
+
+[node name="RearCornerBoxL" type="MeshInstance3D" parent="CockpitDetail" unique_id=1798027897]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97, 0.86, -0.62)
+material_override = ExtResource("3_dhc0e")
+mesh = SubResource("BoxMesh_eb84o")
+
+[node name="RearCornerBoxR" type="MeshInstance3D" parent="CockpitDetail" unique_id=1960603847]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.97, 0.86, -0.62)
+material_override = ExtResource("3_dhc0e")
+mesh = SubResource("BoxMesh_2onak")
+
+[node name="NoseBlockL" type="MeshInstance3D" parent="CockpitDetail" unique_id=2128716017]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.52, 0.6, -3.75)
+material_override = ExtResource("3_dhc0e")
+mesh = SubResource("BoxMesh_yewfg")
+
+[node name="NoseBlockR" type="MeshInstance3D" parent="CockpitDetail" unique_id=265663685]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52, 0.6, -3.75)
+material_override = ExtResource("3_dhc0e")
+mesh = SubResource("BoxMesh_qpi55")
+
+[node name="SignalL" type="MeshInstance3D" parent="CockpitDetail" unique_id=735050405]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.13, 0.72, -1.7)
+material_override = ExtResource("13_1i8r6")
+mesh = SubResource("BoxMesh_if6d2")
+
+[node name="SignalR" type="MeshInstance3D" parent="CockpitDetail" unique_id=882134114]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.13, 0.72, -1.7)
+material_override = ExtResource("13_1i8r6")
+mesh = SubResource("BoxMesh_buflg")
+
+[node name="Antenna" type="MeshInstance3D" parent="CockpitDetail" unique_id=903231752]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35, 1.7, 0.05)
+material_override = ExtResource("4_jqwl7")
+mesh = SubResource("CylinderMesh_hydbk")

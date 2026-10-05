@@ -8,7 +8,7 @@ Turntable video: [fighter_turntable_detailed.mp4](fighter_turntable_detailed.mp4
 
 ## Features
 
-- **The fighter** — modelled from CSG and primitive shapes (~1,950 triangles), with procedurally
+- **The fighter** — modelled from CSG and primitive shapes (~2,500 triangles), with procedurally
   painted panel textures, bump-mapped vents/hatches/markings, two-tone cel lighting and
   screen-space ink outlines.
 - **Rolling-hills terrain** — 4 km noise-generated landscape with matching collision, regenerated
@@ -67,7 +67,7 @@ to play the game.
 
 ## Videos
 
-- `fighter_turntable_detailed.mp4` — current look (reshaped canopy, wings, engines, spine and layered nose)
+- `fighter_turntable_detailed.mp4` — current look (reshaped canopy, wings, bulbous engines, spine and cockpit detail, layered nose)
 - `fighter_turntable_textured.mp4` — textures and outlines on the earlier shape
 - `fighter_turntable_compare.mp4` — triangle optimisation before/after
 - `fighter_turntable.mp4`, `fighter_turntable_optimized.mp4` — earlier versions
