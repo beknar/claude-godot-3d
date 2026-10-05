@@ -9,7 +9,8 @@
 [ext_resource type="Material" uid="uid://2jtoe2cl0tj3" path="res://fighter/materials/nacelle.tres" id="7_7jsxi"]
 [ext_resource type="Material" path="res://fighter/materials/nozzle_glow.tres" id="7_uitlt"]
 [ext_resource type="Material" uid="uid://ubtpsys5g2tm" path="res://fighter/materials/exhaust.tres" id="8_68nov"]
-[ext_resource type="Material" uid="uid://dclyvisq7ykph" path="res://fighter/materials/intake_grille.tres" id="8_q2ryx"]
+[ext_resource type="Material" uid="uid://cgkkh6qivyj1r" path="res://fighter/materials/intake_grille.tres" id="8_q2ryx"]
+[ext_resource type="Material" path="res://fighter/materials/hull_chin.tres" id="11_cptg2"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_25q6q"]
 size = Vector3(0.55, 0.42, 0.9)
@@ -170,7 +171,7 @@ rings = 0
 
 [node name="SideProfile" type="CSGPolygon3D" parent="Fuselage" unique_id=1864174868]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.5, 0, 0)
-polygon = PackedVector2Array(6.2, -0.05, 6.2, 0.2, 6.05, 0.3, 4.5, 0.45, 2.2, 0.75, -0.5, 0.95, -3.2, 0.85, -3.4, 0.2, -3.4, -0.3, -3.2, -0.47, -1, -0.6, 3.5, -0.35, 5.5, -0.15)
+polygon = PackedVector2Array(6.2, -0.05, 6.2, 0.15, 5.95, 0.26, 4.55, 0.36, 4.4, 0.5, 2.2, 0.75, -0.5, 0.95, -3.2, 0.85, -3.4, 0.2, -3.4, -0.3, -3.2, -0.47, -1, -0.6, 3.5, -0.35, 5.5, -0.15)
 depth = 3.0
 material = ExtResource("1_yed1o")
 
@@ -383,12 +384,12 @@ mesh = SubResource("TorusMesh_138xj")
 [node name="Details" type="Node3D" parent="." unique_id=882185968]
 
 [node name="NoseGunL" type="MeshInstance3D" parent="Details" unique_id=110386074]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.2, -0.02, -6.4)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.26, -0.48, -6.35)
 material_override = ExtResource("4_jqwl7")
 mesh = SubResource("CylinderMesh_p1mcj")
 
 [node name="NoseGunR" type="MeshInstance3D" parent="Details" unique_id=1001557785]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.2, -0.02, -6.4)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.26, -0.48, -6.35)
 material_override = ExtResource("4_jqwl7")
 mesh = SubResource("CylinderMesh_6iqsn")
 
@@ -465,3 +466,24 @@ mesh = SubResource("CylinderMesh_cptg2")
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.36, 1.24, 2.9)
 material_override = ExtResource("4_jqwl7")
 mesh = SubResource("CylinderMesh_138xj")
+
+[node name="Chin" type="CSGCombiner3D" parent="." unique_id=577493270]
+
+[node name="SideProfile" type="CSGPolygon3D" parent="Chin" unique_id=1093140927]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.7, 0, 0)
+polygon = PackedVector2Array(5.95, 0, 5.95, -0.3, 5.7, -0.55, 3.4, -0.7, 3, -0.62, 3, 0)
+depth = 1.4
+material = ExtResource("11_cptg2")
+
+[node name="TopProfile" type="CSGPolygon3D" parent="Chin" unique_id=853233995]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.1, 0)
+operation = 1
+polygon = PackedVector2Array(-0.42, 5.95, 0.42, 5.95, 0.56, 5, 0.6, 3, -0.6, 3, -0.56, 5)
+material = ExtResource("11_cptg2")
+
+[node name="FrontProfile" type="CSGPolygon3D" parent="Chin" unique_id=45169226]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+operation = 1
+polygon = PackedVector2Array(-0.6, 0, 0.6, 0, 0.6, -0.5, 0.4, -0.7, -0.4, -0.7, -0.6, -0.5)
+depth = 4.0
+material = ExtResource("11_cptg2")
