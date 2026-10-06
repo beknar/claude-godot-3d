@@ -1,0 +1,19 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://person/materials/person_panels.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://person/textures/armor_panels.png" id="2_map"]
+
+[resource]
+resource_name = "Bronze trim"
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(0.62, 0.45, 0.26, 1)
+shader_parameter/plate_dark = Color(0.42, 0.3, 0.17, 1)
+shader_parameter/line_color = Color(0.08, 0.05, 0.03, 1)
+shader_parameter/roughness_value = 0.35
+shader_parameter/metallic_value = 0.45
+shader_parameter/panel_map = ExtResource("2_map")
+shader_parameter/tile_size = 0.25
+shader_parameter/ink_strength = 0.6
+shader_parameter/relief_depth = 0.004
+shader_parameter/rim_color = Color(0.9, 0.62, 0.32, 1)
+shader_parameter/rim_strength = 0.2

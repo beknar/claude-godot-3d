@@ -1,0 +1,19 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://person/materials/person_panels.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://person/textures/armor_panels.png" id="2_map"]
+
+[resource]
+resource_name = "Gunmetal (limbs, joints, wing frame)"
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(0.16, 0.18, 0.21, 1)
+shader_parameter/plate_dark = Color(0.11, 0.12, 0.14, 1)
+shader_parameter/line_color = Color(0.02, 0.02, 0.03, 1)
+shader_parameter/roughness_value = 0.4
+shader_parameter/metallic_value = 0.4
+shader_parameter/panel_map = ExtResource("2_map")
+shader_parameter/tile_size = 0.35
+shader_parameter/ink_strength = 0.7
+shader_parameter/relief_depth = 0.005
+shader_parameter/rim_color = Color(0.3, 0.5, 0.6, 1)
+shader_parameter/rim_strength = 0.25

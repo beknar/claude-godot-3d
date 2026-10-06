@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://game/fx/ink_outline.gdshader" id="1_shader"]
+
+[resource]
+resource_name = "Ink outline (character close-ups)"
+render_priority = 10
+shader = ExtResource("1_shader")
+shader_parameter/thickness = 1.4
+shader_parameter/crease_threshold = 4.0
+shader_parameter/crease_full = 7.0
+shader_parameter/fade_start = 25.0
+shader_parameter/fade_end = 60.0

@@ -3,7 +3,7 @@
 #   tools/render_frame.sh res://fighter/turntable.tscn 150 out.png
 # GODOT can point at the editor executable (defaults to the path used on this machine).
 set -e
-GODOT="${GODOT:-/e/Downloads/Godot_v4.7.2-stable_win64.exe/Godot_v4.7.2-stable_win64.exe}"
+GODOT="${GODOT:-/c/Users/kestanol/Desktop/Godot_v4.7.2-stable_win64.exe}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TMP="$(mktemp -d)"
 FRAME="$2"

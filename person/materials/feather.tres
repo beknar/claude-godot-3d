@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://person/materials/feather.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://person/textures/feathers.png" id="2_map"]
+
+[resource]
+resource_name = "Feathers"
+shader = ExtResource("1_shader")
+shader_parameter/feather_map = ExtResource("2_map")

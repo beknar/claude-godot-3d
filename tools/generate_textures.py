@@ -244,7 +244,7 @@ class PanelCanvas:
         tiled = tiled.filter(ImageFilter.GaussianBlur(radius))
         return tiled.crop((self.w, self.h, self.w * 2, self.h * 2))
 
-    def finish(self, name, palette):
+    def finish(self, name, palette, out_dir=OUT):
         ink = np.asarray(self.ink, np.float32) / 255
         inset = np.asarray(self.inset, np.float32) / 255
         tone = np.asarray(self.tone, np.float32) / 255
@@ -258,8 +258,8 @@ class PanelCanvas:
         rgba = np.stack([inset, ink, tone, height], axis=-1)
         img = Image.fromarray((rgba * 255 + 0.5).astype(np.uint8), "RGBA")
         img = img.resize(self.out_size, Image.LANCZOS)
-        OUT.mkdir(parents=True, exist_ok=True)
-        img.save(OUT / f"{name}.png", optimize=True)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        img.save(out_dir / f"{name}.png", optimize=True)
 
         # Preview in the reference palette (what the shader produces, unlit).
         base, inset_col, ink_col, decal_col = (np.array(c, np.float32) for c in palette)
@@ -268,7 +268,7 @@ class PanelCanvas:
         col = col * (1 - decal[..., None]) + decal_col * decal[..., None]
         col = col * (1 - ink[..., None]) + ink_col * ink[..., None]
         prev = Image.fromarray((np.clip(col, 0, 1) * 255).astype(np.uint8), "RGB").resize(self.out_size, Image.LANCZOS)
-        prev.save(OUT / f"{name}_preview.png", optimize=True)
+        prev.save(out_dir / f"{name}_preview.png", optimize=True)
         print(f"wrote {name}.png and {name}_preview.png  {self.out_size[0]}x{self.out_size[1]}")
 
 
