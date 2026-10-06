@@ -10,10 +10,12 @@ extends Node
 @export var response: float = 6.0
 
 @export_group("Engine")
-@export var engine_pitch_idle: float = 0.75
-@export var engine_pitch_full: float = 1.25
+## Playback speed of the recorded hum at idle and at full throttle. Keep it near 1:
+## a recording smears when slowed down and turns chipmunky when sped up.
+@export var engine_pitch_idle: float = 0.85
+@export var engine_pitch_full: float = 1.15
 ## Extra pitch on top of full throttle at top afterburner speed.
-@export var engine_pitch_boost_bonus: float = 0.2
+@export var engine_pitch_boost_bonus: float = 0.15
 @export var engine_volume_idle: float = 0.35
 @export var engine_volume_full: float = 0.75
 

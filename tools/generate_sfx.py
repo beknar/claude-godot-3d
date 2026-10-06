@@ -6,16 +6,21 @@ Loops are built so they repeat seamlessly: tonal parts use frequencies with a wh
 number of cycles per loop, and noise beds are synthesized in the frequency domain
 (an inverse FFT is inherently periodic). Each looping file carries a RIFF 'smpl'
 chunk, so Godot's importer (loop mode "Detect From WAV") loops it automatically.
+
+The engine loop is a recording, not synthesized here: see make_engine_loop.py.
 """
 
 import struct
+import zlib
 from pathlib import Path
 
 import numpy as np
 
 SR = 44100
 OUT = Path(__file__).resolve().parent.parent / "game" / "audio"
-rng = np.random.default_rng(20261004)
+SEED = 20261004
+# Reseeded per sound in __main__, so editing one sound never changes another's noise.
+rng = np.random.default_rng(SEED)
 
 
 def t_axis(seconds):
@@ -71,18 +76,6 @@ def write_wav(name, signal, loop=False):
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / name).write_bytes(riff)
     print(f"wrote {name}  ({len(signal) / SR:.2f}s{', loop' if loop else ''})")
-
-
-def engine_loop():
-    # Turbine: low harmonic rumble + a slightly wavering compressor whine + airflow.
-    secs = 2.0
-    t = t_axis(secs)
-    rumble = sum(np.sin(2 * np.pi * 55 * k * t + k) / k ** 1.3 for k in range(1, 7))
-    whine_phase = 2 * np.pi * 880 * t + 0.8 * np.sin(2 * np.pi * 3 * t)
-    whine = np.sin(whine_phase) + 0.4 * np.sin(1.5 * whine_phase)
-    air = periodic_noise(secs, lambda f: band(f, 220, 0.9) + 0.35 * band(f, 1800, 0.6))
-    throb = 1 + 0.12 * np.sin(2 * np.pi * 6 * t)
-    return normalize((0.55 * rumble / 2 + 0.10 * whine + 0.55 * air) * throb, -4)
 
 
 def wind_loop():
@@ -156,11 +149,16 @@ def warning_beep():
     return normalize(sig, -8)
 
 
+SOUNDS = [
+    ("wind_loop.wav", wind_loop, True),
+    ("afterburner_loop.wav", afterburner_loop, True),
+    ("warning_beep_loop.wav", warning_beep, True),
+    ("boost_ignite.wav", boost_ignite, False),
+    ("airbrake.wav", airbrake, False),
+    ("boost_empty.wav", boost_empty, False),
+]
+
 if __name__ == "__main__":
-    write_wav("engine_loop.wav", engine_loop(), loop=True)
-    write_wav("wind_loop.wav", wind_loop(), loop=True)
-    write_wav("afterburner_loop.wav", afterburner_loop(), loop=True)
-    write_wav("warning_beep_loop.wav", warning_beep(), loop=True)
-    write_wav("boost_ignite.wav", boost_ignite())
-    write_wav("airbrake.wav", airbrake())
-    write_wav("boost_empty.wav", boost_empty())
+    for name, make, loop in SOUNDS:
+        rng = np.random.default_rng([SEED, zlib.crc32(name.encode())])
+        write_wav(name, make(), loop=loop)

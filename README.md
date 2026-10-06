@@ -2,8 +2,8 @@
 
 A small Godot 4.7 flight game: pilot a comic-book-styled space fighter over endless rolling
 hills. Everything in it is made inside the engine or by scripts in this repo: the 3D model,
-its textures, the sound effects, the terrain and the visual effects. There are no imported
-art assets.
+its textures, the sound effects, the terrain and the visual effects. The one imported asset
+is the engine hum, a sound effect from Pixabay (see [Credits](#credits)).
 
 ---
 
@@ -18,6 +18,7 @@ art assets.
 - [Regenerating assets and rendering videos](#regenerating-assets-and-rendering-videos)
 - [AI editor integration](#ai-editor-integration)
 - [Troubleshooting](#troubleshooting)
+- [Credits](#credits)
 
 ---
 
@@ -92,7 +93,8 @@ The ship accelerates and slows gradually toward whatever the throttle asks for.
   toward the middle, so you never see the edge of the world.
 
 **Sound**
-- **Engine hum** that rises in pitch and volume with throttle and speed.
+- **Engine hum:** a deep, wide spaceship drone that rises in pitch and volume with throttle
+  and speed. It's mostly bass, so it comes through best on headphones or decent speakers.
 - **Wind** that grows with airspeed and louder with the air brake out.
 - **Afterburner:** an ignition thump, then a crackling roar while it burns.
 - **Air brake:** a clunk followed by a falling hiss.
@@ -189,10 +191,12 @@ An arcade flight model:
 The camera follows a smoothed copy of the ship's orientation. It rolls and loops with the
 ship without ever flipping, and widens its field of view on boost.
 
-### Audio (`game/audio/`, made by `tools/generate_sfx.py`)
+### Audio (`game/audio/`, made by `tools/generate_sfx.py` and `tools/make_engine_loop.py`)
 
-All seven sounds are synthesized by a Python script from tones and shaped noise. The loops
-repeat without clicks, and Godot detects their loop points automatically.
+Six of the seven sounds are synthesized by a Python script from tones and shaped noise. The
+loops repeat without clicks, and Godot detects their loop points automatically.
+The engine hum is a recording (see [Credits](#credits)). `tools/make_engine_loop.py` trims it,
+crossfades its ends into a seamless 45-second loop and saves it as `engine_loop.ogg`.
 `game/fighter_audio.gd` blends the engine, wind and afterburner loops by throttle and speed,
 and plays the one-shot sounds on the controller's events.
 
@@ -222,7 +226,7 @@ game/                    the playable game
   window_controls.gd     fullscreen toggle (autoload)
   terrain/               rolling-hills generator and ground shader
   fx/                    exhaust particles, ink outline
-  audio/                 generated sound effects
+  audio/                 sound effects (generated, plus the engine-hum loop)
 tools/                   asset generators and helper scripts (ignored by Godot)
 addons/godot_ai/         AI editor integration plugin (third party, MIT)
 ```
@@ -237,6 +241,10 @@ executable.
 ```sh
 # Sound effects -> game/audio/*.wav
 uv run --no-project --with numpy python tools/generate_sfx.py
+
+# Engine hum -> game/audio/engine_loop.ogg. Needs the source MP3 in tools/source_audio/
+# (not in the repo; download it from the link under Credits).
+uv run --no-project --with numpy --with imageio-ffmpeg python tools/make_engine_loop.py
 
 # Panel textures -> fighter/textures/*.png (change the seeds in the script for new layouts)
 uv run --no-project --with numpy --with pillow python tools/generate_textures.py
@@ -281,3 +289,12 @@ The game doesn't need it to play. `CLAUDE.md` holds the working notes for Claude
 | Mouse doesn't steer | Click inside the game window to capture the mouse (Esc releases it). |
 | Steering feels upside down | Tick **Invert Mouse Y** on the `Player` node. |
 | Outlines speckle flat surfaces | Keep the camera's **Near** value large (1 m or more); a tiny near plane ruins depth precision. |
+
+---
+
+## Credits
+
+- **Engine hum** (`game/audio/engine_loop.ogg`): ["Spaceship hum low frequency"](https://pixabay.com/sound-effects/film-special-effects-spaceship-hum-low-frequency-296518/)
+  by AudioPapkin, used under the [Pixabay Content License](https://pixabay.com/service/license-summary/).
+  It is trimmed and looped for this game; it isn't offered here as a standalone sound.
+- **AI editor plugin** (`addons/godot_ai/`): [godot-ai](https://github.com/hi-godot/godot-ai), MIT licence.

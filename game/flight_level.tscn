@@ -5,8 +5,8 @@
 [ext_resource type="Script" uid="uid://dk2rfnr6uw4n7" path="res://game/fighter_controller.gd" id="4_x1hdd"]
 [ext_resource type="Script" uid="uid://co3xh2pi5w57" path="res://game/fighter_audio.gd" id="5_3yh5a"]
 [ext_resource type="PackedScene" uid="uid://cwbcvf326uln3" path="res://fighter/fighter.tscn" id="5_6lgp5"]
+[ext_resource type="AudioStream" uid="uid://cvb6wrvcdued7" path="res://game/audio/engine_loop.ogg" id="6_03iqa"]
 [ext_resource type="Script" uid="uid://p3me762545oo" path="res://game/chase_camera.gd" id="6_5wlli"]
-[ext_resource type="AudioStream" uid="uid://2chwaal4uxtf" path="res://game/audio/engine_loop.wav" id="6_bvenf"]
 [ext_resource type="AudioStream" uid="uid://gqq313h3mc14" path="res://game/audio/wind_loop.wav" id="7_7madw"]
 [ext_resource type="AudioStream" uid="uid://cdesnndouryvl" path="res://game/audio/afterburner_loop.wav" id="8_xjf40"]
 [ext_resource type="AudioStream" uid="uid://c6gv1ql7g05gn" path="res://game/audio/warning_beep_loop.wav" id="9_03iqa"]
@@ -86,7 +86,7 @@ script = ExtResource("5_3yh5a")
 fighter = NodePath("..")
 
 [node name="Engine" type="AudioStreamPlayer" parent="Player/Audio" unique_id=1378544995]
-stream = ExtResource("6_bvenf")
+stream = ExtResource("6_03iqa")
 
 [node name="Wind" type="AudioStreamPlayer" parent="Player/Audio" unique_id=2057550171]
 stream = ExtResource("7_7madw")

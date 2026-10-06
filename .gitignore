@@ -6,3 +6,6 @@
 *.avi
 *.mp4
 override.cfg
+
+# Downloaded source recordings (licence forbids standalone redistribution)
+/tools/source_audio/
