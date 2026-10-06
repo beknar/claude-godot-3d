@@ -200,7 +200,10 @@ uv run --no-project --with imageio-ffmpeg python -c "import imageio_ffmpeg;print
   re-runs the importer. Check the `.sample`/`.ctex` timestamp, or the stream length in-game.
 - **Movie Maker toggle** (editor top-right) silences audio and makes every run record to
   `1.avi`. If sound "disappears", check it first.
-- The editor embeds the running game in its Game tab, so the window can't be resized there.
+- The editor embeds the running game in its Game tab at the base size (1152×648), and the
+  game can't resize its own window there (`get_window().size = …` is ignored). The Game tab's
+  ⋮ menu sets the embedded sizing (Fixed / Keep Aspect Ratio / Stretch to Fit); that choice
+  is per-machine editor metadata, not a project setting.
 - **Depth texture in Compatibility:** reconstruct with `ndc = vec3(uv, depth) * 2.0 - 1.0`. The
   depth buffer is coarse (~16-bit), so keep camera `near` at 1–4 m; 0.05 speckles every face.
 - `CSGShape3D.get_meshes()` can be stale; the counter uses `bake_static_mesh()`.

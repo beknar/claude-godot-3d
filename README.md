@@ -285,7 +285,7 @@ The game doesn't need it to play. `CLAUDE.md` holds the working notes for Claude
 | Problem | Fix |
 |---|---|
 | No sound | Movie Maker mode is on (the film-strip button at the editor's top right). It silences audio and records every run to a video file. Turn it off. |
-| Can't resize the game window | The game is running inside the editor's Game tab. Turn off **Embed Game on Next Play**, or press F11 for fullscreen in a standalone run. |
+| Game doesn't resize with the window | The game is running inside the editor's Game tab, which by default keeps it at a fixed 1152×648. In the Game tab's **⋮** menu, choose **Stretch to Fit** (or **Keep Aspect Ratio**) under embedded window sizing. Or turn off **Embed Game on Next Play** to get a separate, freely resizable window (F11 for fullscreen). |
 | Mouse doesn't steer | Click inside the game window to capture the mouse (Esc releases it). |
 | Steering feels upside down | Tick **Invert Mouse Y** on the `Player` node. |
 | Outlines speckle flat surfaces | Keep the camera's **Near** value large (1 m or more); a tiny near plane ruins depth precision. |
