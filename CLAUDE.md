@@ -209,5 +209,5 @@ uv run --no-project --with imageio-ffmpeg python -c "import imageio_ffmpeg;print
 - Keep generated assets reproducible: change the generator, not the output file.
 - Every scene reuses `fighter.tscn`; scene-specific looks go in per-instance overrides
   (for example `FighterLivery`), not edits to shared materials.
-- Don't commit `*.avi`, `override.cfg` or `fighter_vs_reference.png`.
+- Don't commit `*.avi`, `*.mp4`, `override.cfg` or `fighter_vs_reference.png`.
 - Commit messages end with the `Co-Authored-By` trailer; push only when asked.

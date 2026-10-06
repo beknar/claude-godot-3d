@@ -4,4 +4,5 @@
 
 # Local renders and editor overrides
 *.avi
+*.mp4
 override.cfg

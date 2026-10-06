@@ -5,8 +5,6 @@ hills. Everything in it is made inside the engine or by scripts in this repo: th
 its textures, the sound effects, the terrain and the visual effects. There are no imported
 art assets.
 
-Current look: [fighter_turntable_detailed.mp4](fighter_turntable_detailed.mp4)
-
 ---
 
 ## Contents
@@ -256,16 +254,7 @@ ffmpeg -framerate 60 -i frames/frame%08d.png -c:v libx264 -crf 18 -pix_fmt yuv42
 
 Movie Maker records at the project's window size (1152×648). For 1080p, temporarily set the
 base viewport size to 1920×1080; `tools/render_frame.sh` shows how, using an `override.cfg` it
-removes afterwards.
-
-**Videos in this repo**
-| File | Shows |
-|---|---|
-| `fighter_turntable_detailed.mp4` | The current model |
-| `fighter_turntable_textured.mp4` | The painted textures and outlines on the earlier shape |
-| `fighter_turntable_compare.mp4` | The triangle optimisation, before and after |
-| `fighter_turntable.mp4`, `fighter_turntable_optimized.mp4` | Earlier versions |
-| `1.mp4` | A gameplay recording |
+removes afterwards. Rendered videos (`*.mp4`, `*.avi`) are ignored by git.
 
 ---
 
