@@ -124,6 +124,9 @@ func _build() -> void:
 		beam.light_energy = 2.5
 		beam.spot_range = 18.0
 		beam.spot_angle = 32.0
+		beam.distance_fade_enabled = true
+		beam.distance_fade_begin = 60.0
+		beam.distance_fade_length = 15.0
 		add_child(beam, false, Node.INTERNAL_MODE_FRONT)
 
 	var tyre := CylinderMesh.new()

@@ -24,7 +24,11 @@ signal landed
 @export var acceleration: float = 12.0
 @export var air_control: float = 3.0
 @export var jump_velocity: float = 4.8
-@export var gravity: float = 14.0
+## Multiple of the project's gravity (Project Settings > Physics > 3D > Default Gravity).
+## Applied every frame, on the ground too, so she stays pressed to floors, kerbs and slopes.
+@export var gravity_scale: float = 1.8
+## Extra pull while falling, so jumps come down briskly instead of floating.
+@export var fall_gravity_multiplier: float = 1.4
 @export var turn_sharpness: float = 10.0
 ## Grace period after stepping off an edge during which a jump still works.
 @export var coyote_time: float = 0.12
@@ -72,13 +76,17 @@ func _physics_process(delta: float) -> void:
 
 	_air_time = 0.0 if on_floor else _air_time + delta
 	_buffered = jump_buffer if Input.is_action_just_pressed("move_jump") else maxf(_buffered - delta, 0.0)
-	if _buffered > 0.0 and _air_time <= coyote_time and velocity.y <= 0.1:
+	var g := float(ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)) * gravity_scale
+	if velocity.y < 0.0:
+		g *= fall_gravity_multiplier
+	velocity.y -= g * delta
+	if on_floor and velocity.y < 0.0:
+		velocity.y = -g * delta     # one frame's pull: stays grounded without building up speed
+	if _buffered > 0.0 and _air_time <= coyote_time:
 		velocity.y = jump_velocity
 		_buffered = 0.0
 		_air_time = coyote_time + 1.0    # no second jump from the grace period
 		jumped.emit()
-	elif not on_floor:
-		velocity.y -= gravity * delta
 	_fall_speed = maxf(_fall_speed, -velocity.y) if not on_floor else _fall_speed
 
 	move_and_slide()

@@ -12,6 +12,8 @@ __pycache__/
 # Local reference images (kept out of the public repo)
 /woman-pic*.png
 /woman-pic*.png.import
+/sample*.png
+/sample*.png.import
 
 # Downloaded source recordings (licence forbids standalone redistribution)
 /tools/source_audio/

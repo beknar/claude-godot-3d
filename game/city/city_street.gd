@@ -34,6 +34,11 @@ extends Node3D
 	set(value):
 		street_seed = value
 		_queue_rebuild()
+## Multiplies every building's height (1 = 9 to 36 m).
+@export_range(0.5, 4.0) var building_height_scale: float = 1.0:
+	set(value):
+		building_height_scale = value
+		_queue_rebuild()
 @export_range(8.0, 60.0) var light_spacing: float = 24.0:
 	set(value):
 		light_spacing = value
@@ -129,7 +134,7 @@ func rebuild() -> void:
 	# Buildings closing off both ends of the street, and walls keeping walkers inside.
 	for end: float in [-1.0, 1.0]:
 		var width := (road + sidewalk_width) * 2.0
-		_building(Vector3(end * (extent + BUILDING_DEPTH * 0.5), 0, 0), Vector3(BUILDING_DEPTH, _rng.randf_range(14, 30), width + 2.0 * BUILDING_DEPTH))
+		_building(Vector3(end * (extent + BUILDING_DEPTH * 0.5), 0, 0), Vector3(BUILDING_DEPTH, _rng.randf_range(14, 30) * building_height_scale, width + 2.0 * BUILDING_DEPTH))
 		_box_shape(Vector3(1.0, 10.0, width), Vector3(end * (half + 6.0), 5.0, 0))
 	_traffic(half)
 
@@ -184,7 +189,7 @@ func _buildings(side: float, front: float, extent: float) -> void:
 		var w := _rng.randf_range(8.0, 20.0)
 		if _rng.randf() < 0.15:
 			x += 3.0    # an alley
-		var h := _rng.randf_range(9.0, 36.0)
+		var h := _rng.randf_range(9.0, 36.0) * building_height_scale
 		var depth := BUILDING_DEPTH + _rng.randf_range(-2.0, 2.0)
 		var setback := _rng.randf_range(0.0, 0.6)
 		_building(Vector3(x + w * 0.5, 0, side * (front + setback + depth * 0.5)), Vector3(w, h, depth))
@@ -248,6 +253,10 @@ func _street_lights(side: float, road: float, half: float) -> void:
 		spot.spot_range = 14.0
 		spot.spot_angle = 62.0
 		spot.spot_attenuation = 0.8
+		# Far lights are lost in the fog anyway; skipping them keeps long streets cheap.
+		spot.distance_fade_enabled = true
+		spot.distance_fade_begin = 70.0
+		spot.distance_fade_length = 15.0
 		_add(spot)
 		var shape := CollisionShape3D.new()
 		var cyl := CylinderShape3D.new()

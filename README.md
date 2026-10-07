@@ -1,12 +1,12 @@
 # claude-godot-3d
 
 A small Godot 4.7 flight game: pilot a comic-book-styled space fighter over endless rolling
-hills. A second level lets you play as a winged cyborg who can walk, run and fly, and a
-third walks a woman through a city street at dusk.
+hills. A second level lets you play as a winged cyborg who can walk, run and fly, and two
+more walk a woman through a city street at dusk.
 Almost everything is made inside the engine or by scripts in this repo: the 3D models, their
 textures, skeletons and animations, the sound effects, the terrain, the city and the visual
 effects. The imported assets are the engine hum, a sound effect from Pixabay (see
-[Credits](#credits)), and the woman figure, a single static mesh that the repo's scripts rig
+[Credits](#credits)), and the two woman figures, static meshes that the repo's scripts rig
 and animate.
 
 ---
@@ -41,7 +41,8 @@ and animate.
 2. Start Godot, choose **Import**, and select `project.godot`.
 3. Press **F5** (Run Project). The flight level is the main scene.
 4. To play the winged cyborg instead, open `game/person_level.tscn` and press **F6**
-   (Run Current Scene). For the city street, open `game/fig1_level.tscn`.
+   (Run Current Scene). For the city streets, open `game/fig1_level.tscn` or
+   `game/fig2_level.tscn`.
 
 The game opens in a 1152×648 window that can be resized or made fullscreen. The editor runs
 the game inside its **Game** tab by default; to get a separate, freely resizable window, turn
@@ -152,10 +153,12 @@ hands and a bronze core on her chest. She stands on a 1.6 km landscape of gentle
 
 ---
 
-## The city street level
+## The city street levels
 
 `game/fig1_level.tscn` puts you on the sidewalk of a city street at dusk, as a woman in a
-black dress and heels (`fig1/`).
+black dress and heels (`fig1/`). `game/fig2_level.tscn` is the same level with a different
+figure, a dark-haired woman in a red dress (`fig2/`), on a city twice the size: the street
+is twice as long, the buildings twice as tall, and there are twice as many cars.
 
 | Input | Action |
 |---|---|
@@ -171,6 +174,19 @@ black dress and heels (`fig1/`).
 - **Traffic:** parked cars line the kerbs, and cars drive both ways with their headlights on.
   They brake for her if she steps into their lane, and for the car ahead.
 - **The camera:** keeps itself in front of walls, so it doesn't end up inside a building.
+- **Feet on the ground:**
+  - Gravity is steady: the project's own gravity setting, applied every frame, with a
+    little extra on the way down so jumps don't float.
+  - Every frame of the standing, walking, running and landing animations is set so her
+    lowest sole touches the floor, with no hovering or sinking.
+- **Standing still:** she settles into a relaxed pose, with her weight on one leg and the
+  other knee eased forward. Only her breathing moves; she doesn't sway.
+- **The fig2 figure in particular:**
+  - Her face is kept at the model's full detail.
+  - Her hair and skirt swing as she walks, runs, turns and jumps, and settle when she
+    stops. They push against her body and legs rather than passing through them.
+  - Her bust bounces when she runs and jumps, and settles within about half a second.
+  - Her face is evenly lit by a soft light that follows her head and lights only her.
 
 ---
 
@@ -196,12 +212,12 @@ In `game/person_level.tscn`:
 | `Camera` | Distance on the ground and in flight, zoom range, mouse sensitivity, **Invert Mouse Y**, pitch limits, follow smoothing |
 | `Camera/InkOutline` | Outline settings for close-ups (material `game/fx/ink_outline_person.tres`) |
 
-In `game/fig1_level.tscn`:
+In `game/fig1_level.tscn` and `game/fig2_level.tscn`:
 
 | Node | What you can change |
 |---|---|
-| `Street` | Street length, lane, parking and sidewalk widths, kerb height, random seed (building layout and colours), street-light spacing, number of parked cars, cars per lane, crossing position. The street regenerates live in the editor. |
-| `Player` | Walk and run speeds, acceleration, air control, jump height, gravity, jump grace and buffer times, landing threshold, stride lengths |
+| `Street` | Street length, lane, parking and sidewalk widths, kerb height, random seed (building layout and colours), building height scale, street-light spacing, number of parked cars, cars per lane, crossing position. The street regenerates live in the editor. |
+| `Player` | Walk and run speeds, acceleration, air control, jump height, gravity scale and extra fall gravity, jump grace and buffer times, landing threshold, stride lengths |
 | `Camera` | As in the cyborg level, plus wall avoidance |
 
 Key bindings are under **Project → Project Settings → Input Map** (actions starting with
@@ -317,22 +333,40 @@ changed like the rest of the project. About **19,600 triangles** and 153 bones.
     AnimationTree by speed and state. It plays `fold_wings` forward on landing and
     backward on take-off, on a layer that affects only the wings.
 
-### The woman figure (`fig1/`) and the city street (`game/city/`)
+### The woman figures (`fig1/`, `fig2/`) and the city street (`game/city/`)
 
-The figure started as `fig1/woman-model.glb`: one static textured mesh, 1 unit tall, with no
-skeleton. Two scripts turn it into an animated character:
+Both figures started as one static textured mesh with no skeleton:
+- `fig1/woman-model.glb` is a standing pose with one leg angled out.
+- `fig2/source/fig2.glb` is a T-pose with 1.29 million triangles.
 
-1. **`tools/rig_fig1.py`** (run in Blender):
+Two scripts turn each one into an animated character:
+
+1. **`tools/rig_figure.py`** (run in Blender, given `fig1` or `fig2`):
    - Scales her to 1.70 m and places a 21-bone humanoid skeleton at joint positions
-     measured from slices of the mesh. She stands with one leg angled out, so the joints
-     follow her actual limbs rather than a mirrored template.
-   - Binds the mesh with Blender's automatic weights and exports `fig1/woman_rigged.glb`.
-2. **`tools/build_fig1.gd`** (run in Godot):
+     measured from slices of that mesh, so the joints follow her actual limbs.
+   - Reduces fig2 to 190,000 triangles while keeping the front of her head (eyes, nose,
+     mouth, bangs: about 123,000 triangles) at full resolution.
+   - Binds the mesh with Blender's automatic weights, computed on a lighter copy and
+     transferred, and keeps fig2's long hair from being dragged along by her arms.
+   - Adds fig2's spring bones: 7 chains down her hair, 12 around her skirt and one on each
+     side of her bust. It weights the hanging hair and the skirt to them by colour and
+     position, fading in below the scalp and the waistband. The bust uses a soft
+     ellipsoid on each side.
+   - Exports `fig1/woman_rigged.glb` or `fig2/fig2_rigged.glb`.
+2. **`tools/build_figure.gd`** (run in Godot):
    - Turns her to face the same way as the project's other characters and rebuilds the
      skeleton in the same convention as the cyborg's.
-   - Straightens her stance into a neutral standing pose.
-   - Generates idle, walk (a heels walk with a sway of the hips), run, jump, fall and a
-     landing crouch.
+   - Straightens her stance into a neutral standing pose, bringing fig2's arms down from
+     the T-pose.
+   - Generates idle (a still, breathing stance), walk (a heels walk with a sway of the
+     hips), run, jump, fall and a landing crouch, setting every ground frame so her lowest
+     sole touches the floor.
+   - For fig2, it also:
+     - smooths the shading of her face, so her jaw doesn't sit in shadow under overhead
+       lights
+     - adds the face light and the spring-bone simulation, with collision capsules on her
+       torso, arms and thighs
+     - generates lower-detail versions of the mesh for when she's far away
 
 `WalkerController` (`game/walker_controller.gd`) blends the clips by speed, by vertical speed
 in the air, and with a landing crouch on hard landings.
@@ -365,8 +399,12 @@ fighter/                 the fighter model and its look
   textures/              generated panel textures (+ colour previews)
 fig1/                    the woman figure
   woman-model.glb        the source model (static mesh)
-  woman_rigged.glb       the same mesh, skinned by tools/rig_fig1.py
-  fig1.tscn              skeleton, mesh, animation player (generated by tools/build_fig1.gd)
+  woman_rigged.glb       the same mesh, skinned by tools/rig_figure.py
+  fig1.tscn              skeleton, mesh, animation player (generated by tools/build_figure.gd)
+fig2/                    the second woman figure
+  source/fig2.glb        the source model (not imported by Godot: the folder has a .gdignore)
+  fig2_rigged.glb        decimated and skinned by tools/rig_figure.py
+  fig2.tscn              skeleton, mesh, animation player (generated by tools/build_figure.gd)
 person/                  the winged cyborg (generated by tools/build_person.gd)
   person.tscn            skeleton, skinned meshes, animation player
   person_showcase.tscn   the model on its own, for close-ups
@@ -384,6 +422,7 @@ game/                    the playable game
   person_controller.gd   walking, running, jumping, flying, animation blending, HUD
   orbit_camera.gd        mouse-orbit camera (cyborg and city levels)
   fig1_level.tscn        the city street level
+  fig2_level.tscn        the same with the second figure, on a city twice the size
   walker_controller.gd   walking, running, jumping, animation blending, HUD
   city/                  street generator, procedural cars, road/sidewalk/facade shaders
   window_controls.gd     fullscreen toggle (autoload)
@@ -412,10 +451,10 @@ uv run --no-project --with numpy --with imageio-ffmpeg python tools/make_engine_
 # Panel textures -> fighter/textures/*.png (change the seeds in the script for new layouts)
 uv run --no-project --with numpy --with pillow python tools/generate_textures.py
 
-# The woman figure: rig in Blender (4.x or 5.x), then build the Godot scene and animations.
-# Let the editor import fig1/woman_rigged.glb (focus it) before running the second step.
-blender -b --factory-startup -P tools/rig_fig1.py
-godot --headless --path . --script tools/build_fig1.gd
+# The woman figures: rig in Blender (4.x or 5.x), then build the Godot scene and animations.
+# Let the editor import the rigged glb (focus it) before running the second step.
+blender -b --factory-startup -P tools/rig_figure.py -- fig2
+godot --headless --path . --script tools/build_figure.gd -- fig2
 
 # The winged cyborg: textures, then the model, skeleton and animations -> person/
 uv run --no-project --with numpy --with pillow python tools/generate_person_textures.py
