@@ -290,9 +290,11 @@ per triangle against an outward hint, so mirrored parts never flip.
        space equals model offsets, because the rest bases are identity.
      - Current values: hair 2.2/0.55/0.25 and skirt 3.0/0.6/0.15. Lower stiffness let the
        hair fan back into a flat sheet at a run.
-     - Breast is 8.0/0.1/0 with no collisions, since its root is inside the chest capsule.
-       Measured bust-bone pitch: 0° standing, −4° to −1° walking, −13° to +3° running,
-       and −17° to +6° on a jump, settling about 0.4 s after landing.
+     - Breast is 3.0/0.04/0 with no collisions, since its root is inside the chest capsule.
+       Measured bust-bone pitch: 0° standing, −25° to +11° running (mean −0.5°), and −29°
+       to +11° on a jump, settling about 1 s after landing.
+     - That's about twice the bounce of the earlier 8.0/0.1 (−13° to +3° running).
+       Amplitude scales roughly inversely with stiffness, but only while drag stays low.
      - Higher drag makes the chain lag steadily behind her forward motion (at 4.0/0.22
        it averaged −12° at a run). It's a lean, not a bounce.
      - The fifth `springs` value turns that prefix's collisions on or off.
@@ -323,12 +325,24 @@ per triangle against an outward hint, so mirrored parts never flip.
   the run floated up to 21 cm, and in game the gap now stays within ±5 mm.
 
 **Clips:**
-- `idle` 4.0 s, `walk` and `run` 1.0 s (left heel strike at t = 0), `jump` and `fall`
+- `idle` 8.0 s, `walk` and `run` 1.0 s (left heel strike at t = 0), `jump` and `fall`
   (looping air poses), and `land` (0.4 s one-shot crouch).
-- The idle is a static, relaxed stance: weight on her left leg, her right knee eased
-  forward, the shoulders countering the hips. Only her breathing moves (chest, shoulders
-  and neck, ±1°). Measured in game: her head moves 0.4 mm sideways and her chest rises
-  1.1 mm.
+- **The idle is a contrapposto:**
+  - Her pelvis shifts 3 cm over the left (standing) foot and that hip rises (Hips roll
+    −5°). The standing knee is soft (−5°).
+  - The resting right leg goes forward 15°, out, and turned out 12°, with the knee bent 30°.
+  - Her shoulders tilt against her hips.
+  - Arms are drawn in from the neutral A-shape by `idle_arm_in` (fig2 9°, fig1 2°, since
+    fig1's neutral arms already hang close). The elbows are soft, and the left arm hangs
+    a little back while the right swings a little forward.
+  - Motion: two breaths per loop plus a slow head drift. In game, the hips and chest move
+    0 mm sideways and the head turns 8° in all.
+- **Arm-pose pitfalls:**
+  - The forearm twist (Y) and the elbow bend (X) compose in model space, so a bigger bend
+    flips a twisted hand palm-up.
+  - fig2's right forearm needs the opposite twist to the left (−25° against +20°, both
+    as written for the left side) for its palm to face the thigh. Mirrored values flared
+    it palm-out. Check both hands from the front after any arm change.
 - The walk is a heels walk: shorter stride, feet crossing toward the midline, hip sway.
 
 **WalkerController:**

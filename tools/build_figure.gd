@@ -32,6 +32,8 @@ const FIGURES := {
 			"UpperArm": Vector3(-0.16, -1.0, 0.02),
 			"LowerArm": Vector3(-0.08, -1.0, -0.12),
 		},
+		# Her neutral arms already hang close to her body; the idle draws them in less.
+		"idle_arm_in": 2.0,
 	},
 	"fig2": {
 		"source": "res://fig2/fig2_rigged.glb",
@@ -62,11 +64,12 @@ const FIGURES := {
 		"springs": {
 			"Hair": [2.2, 0.55, 0.25, 0.025, true],
 			"Skirt": [3.0, 0.6, 0.15, 0.03, true],
-			# Stiff with little drag: a visible bounce that settles in ~0.4 s, without the
-			# steady backward lag that higher drag gave at a run (4.0 / 0.22 leaned ~-12°
-			# on average, swinging to -28°; this swings -13°..+3° running, -17°..+6° on a
-			# jump). Its root sits inside the chest capsule, so it skips collisions.
-			"Breast": [8.0, 0.1, 0.0, 0.02, false],
+			# Soft with very little drag: a lively bounce that settles in about a second,
+			# without the steady backward lag that higher drag gives at a run (4.0 / 0.22
+			# leaned ~-12° on average). Measured pitch: -25°..+11° running (mean -0.5°),
+			# -29°..+11° on a jump. Its root sits inside the chest capsule, so it skips
+			# collisions.
+			"Breast": [3.0, 0.04, 0.0, 0.02, false],
 		},
 		# Capsules the springs collide with: [attached bone, from bone head, to bone
 		# head, radius]. Both sides are added for "Left..." entries.
@@ -352,26 +355,51 @@ func bump(x: float, center: float, width: float) -> float:
 
 # ---------------------------------------------------------------- clips
 
-## A settled, relaxed stance: weight on her left leg (left hip raised), right knee
-## eased forward, shoulders and head countering the hips. Only her breathing moves:
-## the chest and shoulders rise and fall slightly; nothing sways side to side.
+## A relaxed contrapposto (an 8 s loop):
+## - Weight is on her left leg: her pelvis shifts over that foot and that hip rises.
+##   The standing knee stays soft, not locked. The resting right leg eases forward
+##   and out with a bent knee. Both feet turn out a little.
+## - Her shoulders tilt against her hips and her chest turns back toward the front.
+## - The arms hang loose with bent elbows and the hands turned in toward the thighs:
+##   the left one a little back by her hip, the right one a little forward.
+## - Life without sway: two slow breaths per loop (chest, shoulders, elbows) and a gentle
+##   drift of the head. The body never moves side to side.
 func pose_idle(t: float) -> Dictionary:
-	var breath := sin(TAU * t)
+	var breath := sin(2.0 * TAU * t)
+	var drift := sin(TAU * t)
+	var drift2 := sin(TAU * t + 1.7)
 	var p := {}
-	p["Hips"] = e(0, 4, -3)
-	p["Spine"] = e(0.5 * breath, -2, 2)
-	p["Chest"] = e(-1 + 0.9 * breath, -1, 1.5)
-	p["Neck"] = e(1 - 0.4 * breath, 0, 0)
-	p["Head"] = e(2, 3, -2.5)
-	both(p, "Shoulder", e(0, 0, 0.6 * breath))
-	both(p, "UpperArm", e(4, 0, -3))
-	both(p, "LowerArm", e(14, 0, 0))
-	both(p, "Hand", e(6, 0, 0))
-	# Standing leg straight under the raised hip; resting leg forward, knee eased.
-	p["LeftUpperLeg"] = e(0, -4, 3)
-	p["RightUpperLeg"] = mirror(e(9, 2, -1))
-	p["RightLowerLeg"] = mirror(e(-14, 0, 0))
-	p["RightFoot"] = mirror(e(4, 0, 0))
+	p["hips_offset"] = Vector3(-0.03, 0, 0.005)      # over the left (standing) foot
+	p["Hips"] = e(1, 6, -5)
+	p["Spine"] = e(0.4 * breath, -3, 3)
+	p["Chest"] = e(-1.5 + 0.8 * breath, -3, 3)
+	p["Neck"] = e(1 - 0.3 * breath, 1.5 * drift, -1)
+	p["Head"] = e(3 + 1.0 * drift2, 5 + 2.5 * drift, -5 + 0.8 * drift2)
+	# Left shoulder drops over the raised left hip; both rise a little on each breath.
+	p["LeftShoulder"] = e(0, 0, 3 + 0.6 * breath)
+	p["RightShoulder"] = mirror(e(0, 0, -1.5 + 0.6 * breath))
+	# Arms: drawn in from the neutral stance's slight A-shape to hang at the edge of her
+	# skirt, elbows bent, forearms turned so the palms face the thighs. The left hangs a
+	# little back, by her hip; the right swings a little forward, by her thigh.
+	var arm_in: float = cfg.get("idle_arm_in", 9.0)
+	p["LeftUpperArm"] = e(-5, 8, arm_in)
+	p["LeftLowerArm"] = e(12 + 1.5 * breath, 20, 0)
+	p["LeftHand"] = e(6, 0, -8)
+	# (A bigger elbow bend combines with the forearm twist and flips the hand palm-up,
+	# so the asymmetry is in how far each arm swings, not how much it bends.)
+	# (This model's right forearm needs the opposite twist to the left for the palm to
+	# face the thigh; mirrored values flared the hand palm-out.)
+	p["RightUpperArm"] = mirror(e(6, 8, arm_in + 1.0))
+	p["RightLowerArm"] = mirror(e(15 + 1.5 * breath, -25, 0))
+	p["RightHand"] = mirror(e(6, 0, 4))
+	# Standing leg: under the shifted pelvis, knee soft, toes turned out.
+	p["LeftUpperLeg"] = e(2, 7, 5)
+	p["LeftLowerLeg"] = e(-5, 0, 0)
+	p["LeftFoot"] = e(3, 0, -1)
+	# Resting leg: forward and out, knee bent, turned out, weight on the ball of the foot.
+	p["RightUpperLeg"] = mirror(e(15, 12, -8))
+	p["RightLowerLeg"] = mirror(e(-30, 0, 0))
+	p["RightFoot"] = mirror(e(14, 0, 2))
 	return p
 
 
@@ -532,7 +560,7 @@ func make_clip(clip_name: String, length: float, keys: int, pose_fn: Callable, l
 func build_animations() -> AnimationLibrary:
 	var lib := AnimationLibrary.new()
 	lib.add_animation("RESET", make_clip("RESET", 0.001, 1, func(_t: float) -> Dictionary: return {}, false))
-	lib.add_animation("idle", make_clip("idle", 4.0, 32, pose_idle))
+	lib.add_animation("idle", make_clip("idle", 8.0, 64, pose_idle))
 	lib.add_animation("walk", make_clip("walk", 1.0, 24, pose_walk))
 	lib.add_animation("run", make_clip("run", 1.0, 24, pose_run))
 	lib.add_animation("jump", make_clip("jump", 1.0, 8, pose_jump))

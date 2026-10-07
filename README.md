@@ -179,13 +179,17 @@ is twice as long, the buildings twice as tall, and there are twice as many cars.
     little extra on the way down so jumps don't float.
   - Every frame of the standing, walking, running and landing animations is set so her
     lowest sole touches the floor, with no hovering or sinking.
-- **Standing still:** she settles into a relaxed pose, with her weight on one leg and the
-  other knee eased forward. Only her breathing moves; she doesn't sway.
+- **Standing still:** she settles into a relaxed pose:
+  - Her weight is on one leg, her hips shifted over it.
+  - The other knee is bent, with that foot eased forward and turned out.
+  - Her shoulders tilt against her hips.
+  - Her arms hang loose by her skirt, elbows soft and palms toward her thighs.
+  - She breathes slowly and her head drifts a little, but her body doesn't sway.
 - **The fig2 figure in particular:**
   - Her face is kept at the model's full detail.
   - Her hair and skirt swing as she walks, runs, turns and jumps, and settle when she
     stops. They push against her body and legs rather than passing through them.
-  - Her bust bounces when she runs and jumps, and settles within about half a second.
+  - Her bust bounces when she runs and jumps, and settles within about a second.
   - Her face is evenly lit by a soft light that follows her head and lights only her.
 
 ---
