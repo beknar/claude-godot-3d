@@ -42,6 +42,20 @@ signal landed
 @export var walk_stride: float = 1.35
 @export var run_stride: float = 3.2
 
+@export_group("Transitions")
+## Cross-fade with eased (critically damped) curves that start and stop gently, over
+## the times below. Off: the older exponential smoothing, which jumps off the mark.
+@export var eased_transitions: bool = false
+## Seconds for idle/walk/run blends to settle.
+@export var gait_fade_time: float = 0.25
+## Into the air pose: short, so the take-off reads as a push.
+@export var air_fade_in_time: float = 0.1
+## Back to the ground clips after touchdown.
+@export var air_fade_out_time: float = 0.2
+## Landing crouch cross-fade in and out (seconds).
+@export var land_fade_in: float = 0.05
+@export var land_fade_out: float = 0.12
+
 var _yaw := 0.0
 var _air_time := 0.0
 var _buffered := 0.0
@@ -51,6 +65,8 @@ var _tree: AnimationTree
 var _ground_blend := 0.0
 var _air_amount := 0.0
 var _rise_fall := 0.0
+## Rates of change for the eased blends.
+var _blend_vel := {}
 
 
 func _ready() -> void:
@@ -138,8 +154,8 @@ func _build_animation_tree() -> void:
 	tree_root.connect_node("airborne", 0, "ground_scale")
 	tree_root.connect_node("airborne", 1, "air")
 	var land := AnimationNodeOneShot.new()
-	land.fadein_time = 0.05
-	land.fadeout_time = 0.12
+	land.fadein_time = land_fade_in
+	land.fadeout_time = land_fade_out
 	tree_root.add_node("land", land)
 	tree_root.add_node("land_clip", _clip("land"))
 	tree_root.connect_node("land", 0, "airborne")
@@ -169,7 +185,11 @@ func _update_animation(delta: float) -> void:
 	var ground_target := h / walk_speed
 	if h > walk_speed:
 		ground_target = 1.0 + (h - walk_speed) / (run_speed - walk_speed)
-	_ground_blend = lerpf(_ground_blend, clampf(ground_target, 0.0, 2.0), blend)
+	ground_target = clampf(ground_target, 0.0, 2.0)
+	if eased_transitions:
+		_ground_blend = _ease_to("ground", _ground_blend, ground_target, gait_fade_time, delta)
+	else:
+		_ground_blend = lerpf(_ground_blend, ground_target, blend)
 	# Both gait clips are one-second cycles: scale time so a cycle covers one stride.
 	var walk_cadence := walk_speed / walk_stride
 	var cadence := lerpf(1.0, walk_cadence, _ground_blend)
@@ -177,13 +197,34 @@ func _update_animation(delta: float) -> void:
 		cadence = lerpf(walk_cadence, run_speed / run_stride, _ground_blend - 1.0)
 	# In the air for more than a moment (not just a bump in the pavement).
 	var airborne := _air_time > 0.08
-	_air_amount = lerpf(_air_amount, 1.0 if airborne else 0.0, 1.0 - exp(-12.0 * delta))
-	_rise_fall = lerpf(_rise_fall, clampf(0.5 - velocity.y / jump_velocity, 0.0, 1.0), 1.0 - exp(-6.0 * delta))
+	var rise_fall_target := clampf(0.5 - velocity.y / jump_velocity, 0.0, 1.0)
+	if eased_transitions:
+		# A jump goes into the air pose at once, not after the bump-filter delay.
+		airborne = airborne or (_air_time > 0.0 and velocity.y > 1.0)
+		_air_amount = _ease_to("air", _air_amount, 1.0 if airborne else 0.0,
+				air_fade_in_time if airborne else air_fade_out_time, delta)
+		_rise_fall = _ease_to("rise_fall", _rise_fall, rise_fall_target, 0.2, delta)
+	else:
+		_air_amount = lerpf(_air_amount, 1.0 if airborne else 0.0, 1.0 - exp(-12.0 * delta))
+		_rise_fall = lerpf(_rise_fall, rise_fall_target, 1.0 - exp(-6.0 * delta))
 
 	_tree.set("parameters/ground/blend_position", _ground_blend)
 	_tree.set("parameters/ground_scale/scale", cadence)
 	_tree.set("parameters/air/blend_position", _rise_fall)
-	_tree.set("parameters/airborne/blend_amount", _air_amount)
+	_tree.set("parameters/airborne/blend_amount", clampf(_air_amount, 0.0, 1.0))
+
+
+## Critically damped approach to `target` taking about `time` seconds: eases in and out
+## (no sudden start, no overshoot). Keeps each parameter's rate of change by `key`.
+func _ease_to(key: String, current: float, target: float, time: float, delta: float) -> float:
+	var omega := 2.0 / maxf(time * 0.5, 0.001)
+	var x := omega * delta
+	var decay := 1.0 / (1.0 + x + 0.48 * x * x + 0.235 * x * x * x)
+	var change := current - target
+	var vel: float = _blend_vel.get(key, 0.0)
+	var temp := (vel + omega * change) * delta
+	_blend_vel[key] = (vel - omega * temp) * decay
+	return target + (change + temp) * decay
 
 
 # ---------------------------------------------------------------- HUD

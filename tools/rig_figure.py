@@ -132,6 +132,141 @@ FIGURES = {
             "RightToeEnd": (-0.062, 0.01, 0.1),
         },
     },
+    # Standing as in her reference (her right leg angled out, arms hanging at her sides),
+    # 1.07 M triangles. Long straight hair to her hips (4-bone chains), a fitted dress
+    # (no skirt chains), and the same full-resolution face and bust springs as fig2.
+    "fig3": {
+        "source": "fig3/source/fig3.glb",
+        "output": "fig3/fig3_rigged.glb",
+        "decimate_to": 190000,
+        "detail": (1.44, 0.03, 0.105),
+        "arm_band": None,
+        "hair": [
+            [(0.0, 1.48, -0.07), (0.0, 1.36, -0.13), (0.0, 1.22, -0.15), (0.0, 1.09, -0.15), (0.0, 0.97, -0.15)],
+            [(0.07, 1.48, -0.06), (0.10, 1.36, -0.12), (0.12, 1.22, -0.14), (0.13, 1.09, -0.14), (0.14, 0.97, -0.13)],
+            [(-0.07, 1.48, -0.06), (-0.10, 1.36, -0.12), (-0.12, 1.22, -0.14), (-0.13, 1.09, -0.14), (-0.14, 0.97, -0.13)],
+            # Beside her, behind the arms (clear of their colliders).
+            [(0.09, 1.49, -0.02), (0.14, 1.38, -0.09), (0.17, 1.24, -0.11), (0.19, 1.10, -0.11), (0.21, 0.98, -0.10)],
+            [(-0.09, 1.49, -0.02), (-0.14, 1.38, -0.09), (-0.17, 1.24, -0.11), (-0.19, 1.10, -0.11), (-0.21, 0.98, -0.10)],
+            # The locks framing her face, falling in front of her shoulders.
+            [(0.08, 1.50, 0.06), (0.10, 1.42, 0.07), (0.11, 1.34, 0.08), (0.12, 1.26, 0.08)],
+            [(-0.08, 1.50, 0.06), (-0.10, 1.42, 0.07), (-0.11, 1.34, 0.08), (-0.12, 1.26, 0.08)],
+        ],
+        "hair_fade": (1.475, 1.40),
+        "hair_bottom": 0.90,
+        # Her hair is one shell with her back: it hangs from the chest and swings partly.
+        "hair_root": ("Chest", 1.2),
+        "hair_swing": 0.5,
+        "hair_seat": (1.10, 0.97),
+        # Her arms hang against her sides (see the arm_reach pass in rig()).
+        "arm_reach": (0.045, 0.04, 0.08),
+        "skirt": None,
+        "bust": {
+            "bones": [
+                [(0.07, 1.30, 0.06), (0.073, 1.275, 0.13), (0.075, 1.25, 0.20)],
+                [(-0.07, 1.30, 0.06), (-0.073, 1.275, 0.13), (-0.075, 1.25, 0.20)],
+            ],
+            "center": (0.075, 1.27, 0.15),
+            "radii": (0.065, 0.075, 0.08),
+        },
+        "joints": {
+            "Hips": (0.005, 0.93, 0.05),
+            "Spine": (0.005, 1.05, 0.03),
+            "Chest": (0.005, 1.21, 0.02),
+            "Neck": (0.0, 1.43, 0.0),
+            "Head": (0.0, 1.50, 0.02),
+            "HeadTop": (0.0, 1.70, 0.04),
+            "LeftShoulder": (0.04, 1.39, 0.0),
+            "LeftUpperArm": (0.145, 1.37, -0.01),
+            "LeftLowerArm": (0.19, 1.13, -0.04),
+            "LeftHand": (0.235, 0.95, -0.025),
+            "LeftHandEnd": (0.26, 0.80, -0.04),
+            "RightShoulder": (-0.04, 1.39, 0.0),
+            "RightUpperArm": (-0.15, 1.37, -0.01),
+            "RightLowerArm": (-0.175, 1.13, -0.01),
+            "RightHand": (-0.16, 0.96, 0.04),
+            "RightHandEnd": (-0.22, 0.81, 0.07),
+            "LeftUpperLeg": (0.085, 0.87, 0.04),
+            "LeftLowerLeg": (0.052, 0.47, 0.0),
+            "LeftFoot": (0.025, 0.11, -0.02),
+            "LeftToes": (0.045, 0.02, 0.07),
+            "LeftToeEnd": (0.05, 0.005, 0.11),
+            "RightUpperLeg": (-0.075, 0.87, 0.06),
+            "RightLowerLeg": (-0.155, 0.47, 0.035),
+            "RightFoot": (-0.22, 0.11, 0.02),
+            "RightToes": (-0.245, 0.02, 0.11),
+            "RightToeEnd": (-0.25, 0.005, 0.16),
+        },
+    },
+    # A symmetric T-pose in platform heels, 1.50 M triangles: long black hair down her back
+    # to y 1.07 (one shell with her back, as fig3's), locks framing her face to the chin,
+    # a fitted maroon dress (too dark for the `red` test: the saturation test tells it from
+    # the hair), white thigh-highs and bare arms.
+    "fig4": {
+        "source": "fig4/source/fig4.glb",
+        "output": "fig4/fig4_rigged.glb",
+        # Her face alone keeps 129k; at 190k in total the smooth bare arms were cut to
+        # ~20 vertices per 5 cm and bent in facets.
+        "decimate_to": 240000,
+        "detail": (1.46, 0.02, 0.10),
+        "arm_band": None,
+        "hair": [
+            [(0.0, 1.50, -0.08), (0.0, 1.40, -0.13), (0.0, 1.29, -0.145), (0.0, 1.18, -0.145), (0.0, 1.07, -0.14)],
+            [(0.07, 1.49, -0.07), (0.09, 1.39, -0.125), (0.10, 1.28, -0.135), (0.10, 1.17, -0.135), (0.10, 1.07, -0.13)],
+            [(-0.07, 1.49, -0.07), (-0.09, 1.39, -0.125), (-0.10, 1.28, -0.135), (-0.10, 1.17, -0.135), (-0.10, 1.07, -0.13)],
+            # Over her shoulders and down beside her back.
+            [(0.10, 1.50, -0.02), (0.14, 1.40, -0.08), (0.14, 1.29, -0.10), (0.13, 1.18, -0.10), (0.13, 1.08, -0.09)],
+            [(-0.10, 1.50, -0.02), (-0.14, 1.40, -0.08), (-0.14, 1.29, -0.10), (-0.13, 1.18, -0.10), (-0.13, 1.08, -0.09)],
+            # The locks framing her face.
+            [(0.08, 1.52, 0.07), (0.09, 1.47, 0.06), (0.09, 1.42, 0.05)],
+            [(-0.08, 1.52, 0.07), (-0.09, 1.47, 0.06), (-0.09, 1.42, 0.05)],
+        ],
+        "hair_fade": (1.475, 1.40),
+        "hair_bottom": 1.00,
+        # Below her chin nothing hangs in front of her: dark specks there are the dress.
+        "hair_front": (1.42, 0.05),
+        "hair_root": ("Chest", 1.2),
+        "hair_swing": 0.5,
+        # Radii round the upper arm, forearm and hand (her arms are bare).
+        "arm_reach": (0.055, 0.04, 0.07),
+        "skirt": None,
+        "bust": {
+            "bones": [
+                [(0.065, 1.28, 0.03), (0.067, 1.255, 0.10), (0.07, 1.23, 0.165)],
+                [(-0.065, 1.28, 0.03), (-0.067, 1.255, 0.10), (-0.07, 1.23, 0.165)],
+            ],
+            "center": (0.065, 1.24, 0.12),
+            "radii": (0.065, 0.075, 0.075),
+        },
+        "joints": {
+            "Hips": (0.0, 0.93, 0.0),
+            "Spine": (0.0, 1.06, 0.02),
+            "Chest": (0.0, 1.22, 0.0),
+            "Neck": (0.0, 1.43, -0.02),
+            "Head": (0.0, 1.50, 0.0),
+            "HeadTop": (0.0, 1.70, 0.02),
+            "LeftShoulder": (0.04, 1.41, -0.03),
+            "LeftUpperArm": (0.17, 1.39, -0.005),
+            "LeftLowerArm": (0.39, 1.387, 0.0),
+            "LeftHand": (0.578, 1.384, 0.015),
+            "LeftHandEnd": (0.75, 1.383, 0.02),
+            "RightShoulder": (-0.04, 1.41, -0.03),
+            "RightUpperArm": (-0.17, 1.39, -0.005),
+            "RightLowerArm": (-0.39, 1.387, 0.0),
+            "RightHand": (-0.578, 1.384, 0.015),
+            "RightHandEnd": (-0.75, 1.383, 0.02),
+            "LeftUpperLeg": (0.08, 0.88, 0.005),
+            "LeftLowerLeg": (0.062, 0.535, 0.008),
+            "LeftFoot": (0.054, 0.185, -0.008),
+            "LeftToes": (0.055, 0.035, 0.05),
+            "LeftToeEnd": (0.055, 0.012, 0.092),
+            "RightUpperLeg": (-0.08, 0.88, 0.005),
+            "RightLowerLeg": (-0.062, 0.535, 0.008),
+            "RightFoot": (-0.054, 0.185, -0.008),
+            "RightToes": (-0.055, 0.035, 0.05),
+            "RightToeEnd": (-0.055, 0.012, 0.092),
+        },
+    },
 }
 
 # bone: (head joint, tail joint, parent)
@@ -154,7 +289,6 @@ for side in ("Left", "Right"):
         (side + "Toes", side + "Toes", side + "ToeEnd", side + "Foot"),
     ]
 ARM_BONES = {s + b for s in ("Left", "Right") for b in ("UpperArm", "LowerArm", "Hand")}
-
 
 def to_blender(p):
     """glTF (x, y up, z forward) to Blender (x, -z, z up)."""
@@ -207,8 +341,11 @@ def vertex_colors(obj):
 def chain_bones(cfg):
     """Spring-bone chains: [(bone name, head, tail, parent)] in glTF axes."""
     bones = []
+    root, below = cfg.get("hair_root", ("Head", 0.0))
     for c, points in enumerate(cfg.get("hair") or []):
-        parent = "Head"
+        # Long locks lying down her back can hang from the chest (`hair_root`: bone, for
+        # chains reaching below y), so they stay on her back as she turns her head.
+        parent = root if points[-1][1] < below else "Head"
         for k in range(len(points) - 1):
             bone = f"Hair{c + 1}_{k + 1}"
             bones.append((bone, points[k], points[k + 1], parent))
@@ -232,10 +369,33 @@ def chain_bones(cfg):
     return bones
 
 
-def body_core(P):
+ARM_FADE = 0.025
+
+
+def arm_keep(P, cfg):
+    """1 within cfg["arm_reach"] (radii round the upper arm, forearm and hand) of either
+    arm, fading to 0 over ARM_FADE beyond: how much a vertex may belong to the arms."""
+    keep = np.zeros(len(P))
+    for side in ("Left", "Right"):
+        pts = [np.array(cfg["joints"][side + j]) for j in ("UpperArm", "LowerArm", "Hand", "HandEnd")]
+        for a, b, r in zip(pts, pts[1:], cfg["arm_reach"]):
+            ab = b - a
+            t = np.clip(((P - a) @ ab) / (ab @ ab), 0.0, 1.0)
+            d = np.linalg.norm(a + t[:, None] * ab - P, axis=1)
+            keep = np.maximum(keep, smoothstep(r + ARM_FADE, r, d))
+    return keep
+
+
+def body_core(P, cfg=None):
     """Vertices on her body (torso, neck, arms in the T-pose) rather than hanging hair."""
     x, y, z = P[:, 0], P[:, 1], P[:, 2]
     neck = (y > 1.38) & (y < 1.50) & (np.hypot(x, z + 0.02) < 0.065)
+    if cfg and cfg.get("arm_reach"):
+        # Arms down, hair lying on her back and threading through her torso: the hair is
+        # told apart by its colour alone (see chain_weights), so only her neck and the
+        # dark briefs under her hem are protected.
+        briefs = (y < 0.97) & (z > -0.05) & (np.abs(x) < 0.13)
+        return neck | briefs
     torso = (y > 0.90) & (y < 1.42) & (np.abs(x) < 0.15) & (z > -0.105) & (z < 0.18)
     # Arms, with room for the puffed off-shoulder sleeves near the shoulders.
     sleeve = np.where(np.abs(x) < 0.32, 0.085, 0.06)
@@ -256,7 +416,21 @@ def chain_weights(obj, cfg, chains):
     if cfg.get("hair"):
         start, full = cfg["hair_fade"]
         # Only down to the tips of her hair: her shoes and stocking tops are dark too.
-        f = smoothstep(start, full, y) * ((lum < 0.5) & ~red & ~body_core(P) & (y > cfg["hair_bottom"]))
+        dark = (lum < 0.5) & ~red
+        if cfg.get("arm_reach"):
+            dark &= col.max(1) - col.min(1) < 0.15      # neutral: not the shaded dress
+        f = smoothstep(start, full, y) * (dark & ~body_core(P, cfg) & (y > cfg["hair_bottom"]))
+        if cfg.get("hair_front"):
+            below, max_z = cfg["hair_front"]
+            f *= ~((y < below) & (P[:, 2] > max_z))
+        # A model whose hair is fused into one closed shell with her back (and painted
+        # over the dress beneath it) tears if the hair swings freely: `hair_swing` < 1
+        # keeps that share of the body's weights.
+        f *= cfg.get("hair_swing", 1.0)
+        if cfg.get("hair_seat"):
+            # Where the hair lies over her seat it mostly rides on her hips.
+            top, bottom = cfg["hair_seat"]
+            f *= 0.3 + 0.7 * smoothstep(bottom, top, y)
         jobs.append(("Hair", f))
     if cfg.get("skirt"):
         start, full = cfg["skirt_fade"]
@@ -477,6 +651,30 @@ def rig(name, cfg):
         bpy.context.view_layer.objects.active = arm
         bpy.ops.object.parent_set(type="ARMATURE")
         fill_unweighted(mesh)
+
+    # Arms hanging close to her sides: bone heat spreads the arm bones over the sides
+    # and back of her torso and the hair behind them, which then tear as the arms
+    # swing. `arm_reach` = radii round the upper arm, forearm and hand: arm weight fades
+    # out over ARM_FADE beyond them, and off anything darker than skin, and goes to the
+    # nearest other bone.
+    if cfg.get("arm_reach"):
+        # Her arms are bare: only skin rides on them, never the hair or dress beside.
+        lum = vertex_colors(mesh) @ np.array([0.299, 0.587, 0.114])
+        keep = arm_keep(gltf_positions(mesh), cfg) * smoothstep(0.4, 0.6, lum)
+        groups = {g.index: g for g in mesh.vertex_groups}
+        moved = 0
+        for v in np.flatnonzero(keep < 0.999).tolist():
+            vert = mesh.data.vertices[v]
+            shed = 0.0
+            for g in list(vert.groups):
+                if groups[g.group].name in ARM_BONES and g.weight > 0.0:
+                    shed += g.weight * (1.0 - keep[v])
+                    groups[g.group].add([v], g.weight * keep[v], "REPLACE")
+            if shed > 1e-4:
+                bone = nearest_bone(mesh.matrix_world @ vert.co, exclude=ARM_BONES)
+                (mesh.vertex_groups.get(bone) or mesh.vertex_groups.new(name=bone)).add([v], shed, "ADD")
+                moved += 1
+        print(f"RIG moved arm weight off {moved} vertices beyond the arms' reach")
 
     if chains:
         chain_weights(mesh, cfg, chains)

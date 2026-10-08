@@ -83,6 +83,98 @@ const FIGURES := {
 		],
 		"lods": true,
 	},
+	# Standing with her right leg angled out and her arms already hanging; long straight
+	# hair to her hips and a fitted dress. Uses the "natural" animation set.
+	"fig3": {
+		"source": "res://fig3/fig3_rigged.glb",
+		"dir": "res://fig3/",
+		"name": "Fig3",
+		"scene": "fig3.tscn",
+		"anims": "fig3_animations.tres",
+		"material": "fig3_material.tres",
+		"neutral": {
+			"UpperLeg": Vector3(0.005, -1.0, 0.0),
+			"LowerLeg": Vector3(-0.005, -1.0, 0.02),
+			"UpperArm": Vector3(-0.12, -1.0, 0.03),
+			"LowerArm": Vector3(-0.06, -1.0, -0.12),
+		},
+		"face": {
+			"center": Vector3(0.0, 1.575, -0.045),
+			"radii": Vector3(0.10, 0.13, 0.12),
+			"blend": 0.7,
+			"light_energy": 0.45,
+		},
+		"springs": {
+			# Long hair, but one shell with her back (see rig_figure.py): simulated
+			# relative to her hips and well damped, so it sways with her body instead of
+			# trailing out behind her as she runs (which tears the shell).
+			"Hair": [2.5, 0.6, 0.3, 0.025, true, "Hips"],
+			"Breast": [3.0, 0.04, 0.0, 0.02, false],
+		},
+		"colliders": [
+			["Hips", "Hips", "Spine", 0.13],
+			["Spine", "Spine", "Chest", 0.12],
+			["Chest", "Chest", "Neck", 0.13],
+			["Neck", "Neck", "Head", 0.055],
+			["LeftShoulder", "LeftShoulder", "LeftUpperArm", 0.055],
+			["LeftUpperArm", "LeftUpperArm", "LeftLowerArm", 0.05],
+			["LeftLowerArm", "LeftLowerArm", "LeftHand", 0.04],
+			# No thigh colliders: her hair ends at her seat, and striding thighs would
+			# flick its tips out.
+		],
+		"lods": true,
+		"anim": "natural",
+		"idle_arm_in": 3.0,
+		# Her right hand is modelled open, palm forward and flaring out (as in her
+		# reference): rolled 70° at the wrist and swung in, with the forearm, it hangs
+		# relaxed by her thigh. Global Z: - swings her right side in.
+		"bone_fix": {"RightLowerArm": [0.0, -10.0], "RightHand": [70.0, -16.0]},
+	},
+	# A symmetric T-pose in platform heels; long hair fused with her back (as fig3's),
+	# a fitted dress and bare arms. Uses the "natural" animation set.
+	"fig4": {
+		"source": "res://fig4/fig4_rigged.glb",
+		"dir": "res://fig4/",
+		"name": "Fig4",
+		"scene": "fig4.tscn",
+		"anims": "fig4_animations.tres",
+		"material": "fig4_material.tres",
+		"neutral": {
+			"UpperLeg": Vector3(-0.015, -1.0, 0.0),
+			"LowerLeg": Vector3(-0.005, -1.0, 0.02),
+			# T-pose arms down beside the fitted dress.
+			"UpperArm": Vector3(-0.15, -1.0, 0.03),
+			"LowerArm": Vector3(-0.1, -1.0, -0.12),
+		},
+		"face": {
+			"center": Vector3(0.0, 1.575, -0.015),
+			"radii": Vector3(0.10, 0.13, 0.12),
+			"blend": 0.7,
+			"light_energy": 0.45,
+		},
+		"springs": {
+			"Hair": [2.5, 0.6, 0.3, 0.025, true, "Hips"],
+			"Breast": [3.0, 0.04, 0.0, 0.02, false],
+		},
+		"colliders": [
+			["Hips", "Hips", "Spine", 0.13],
+			["Spine", "Spine", "Chest", 0.12],
+			["Chest", "Chest", "Neck", 0.13],
+			["Neck", "Neck", "Head", 0.055],
+			["LeftShoulder", "LeftShoulder", "LeftUpperArm", 0.055],
+			["LeftUpperArm", "LeftUpperArm", "LeftLowerArm", 0.05],
+			["LeftLowerArm", "LeftLowerArm", "LeftHand", 0.04],
+		],
+		"lods": true,
+		"anim": "natural",
+		"cubic_keys": true,
+		"plant_feet": true,
+		"idle_arm_in": 4.0,
+		# Lowered from the T-pose, both palms faced forward and out: each forearm rolls
+		# its palm in toward the thigh (the right a little more, as her idle swings that
+		# arm forward).
+		"bone_fix": {"LeftLowerArm": [-30.0, 0.0], "RightLowerArm": [38.0, 0.0]},
+	},
 }
 ## Clips seated on the floor keyframe by keyframe (the others use the standing height).
 const GROUNDED := ["RESET", "idle", "walk", "run", "land"]
@@ -301,16 +393,23 @@ func compute_neutral() -> void:
 ## Local bone rotations for a pose: N_parent^-1 * pose * N_bone (see make_clip).
 func local_rotations(pose: Dictionary) -> Array[Quaternion]:
 	var out: Array[Quaternion] = []
+	var fixes: Dictionary = cfg.get("bone_fix", {})
 	for i in bone_names.size():
 		var q: Quaternion = pose.get(bone_names[i], Quaternion.IDENTITY)
+		if fixes.has(bone_names[i]):
+			# Per-model corrections in every clip: [roll about the bone's (vertical, in the
+			# neutral stance) axis before the pose, sideways swing after it], in degrees.
+			var fix: Array = fixes[bone_names[i]]
+			q = e(0, 0, fix[1]) * q * Quaternion(Vector3.UP, deg_to_rad(fix[0]))
 		var parent_neutral := neutral[bone_parent[i]] if bone_parent[i] >= 0 else Quaternion.IDENTITY
 		out.append((parent_neutral.inverse() * q * neutral[i]).normalized())
 	return out
 
 
-## Height of the lowest sole vertex with these local rotations and the hips at `hips`
-## (identity rest bases: each bone's global basis is its chain of local rotations).
-func lowest_sole(local: Array[Quaternion], hips: Vector3) -> float:
+## Forward kinematics: each bone's global basis and head position for these local
+## rotations, with the hips at `hips` (identity rest bases: a bone's global basis is its
+## chain of local rotations). Returns [bases, origins].
+func fk(local: Array[Quaternion], hips: Vector3) -> Array:
 	var basis: Array[Basis] = []
 	var origin: Array[Vector3] = []
 	for i in bone_names.size():
@@ -321,6 +420,94 @@ func lowest_sole(local: Array[Quaternion], hips: Vector3) -> float:
 		else:
 			basis.append(basis[parent] * Basis(local[i]))
 			origin.append(origin[parent] + basis[parent] * (bone_head[i] - bone_head[parent]))
+	return [basis, origin]
+
+
+## Stride length (metres per 1 s cycle) of a ground clip: how fast the planted left foot
+## travels backward relative to the hips while it's down. WalkerController time-scales
+## the clip by speed / stride, so this is the stride at which the feet don't slide.
+func estimate_stride(pose_fn: Callable, keys := 60) -> float:
+	var foot := b("LeftFoot")
+	var ys := PackedFloat32Array()
+	var zs := PackedFloat32Array()
+	for k in keys:
+		var origin: Array = fk(local_rotations(pose_fn.call(float(k) / keys)), bone_head[0])[1]
+		ys.append(origin[foot].y)
+		zs.append(origin[foot].z)
+	var lowest := INF
+	for y in ys:
+		lowest = minf(lowest, y)
+	var drift := 0.0
+	var frames := 0
+	for k in keys:
+		var k2 := (k + 1) % keys
+		if ys[k] < lowest + 0.012 and ys[k2] < lowest + 0.012:
+			drift += zs[k2] - zs[k]
+			frames += 1
+	return drift / maxf(frames, 1) * keys
+
+
+## In-place gait clips with a steady body speed: a game moves her at a constant speed,
+## but the posed legs carry each planted foot backward unevenly (fast at push-off), so
+## the feet slid. Shifts the hips forward and back over the ground plane, key by key,
+## so whichever foot is down moves backward at one steady rate: the pelvis surge of a
+## real gait, and the root motion the clip implies made constant. Returns the stride
+## (metres per cycle) at which the feet then stay put. Edits `hips` in place.
+func plant_feet(locals: Array, hips: PackedVector3Array) -> float:
+	var n := hips.size()
+	var parts := [[b("LeftFoot"), b("LeftToes")], [b("RightFoot"), b("RightToes")]]
+	var pts: Array = []        # per key: [left ankle, left ball, right ankle, right ball]
+	for k in n:
+		var origin: Array = fk(locals[k], hips[k])[1]
+		pts.append([origin[parts[0][0]], origin[parts[0][1]], origin[parts[1][0]], origin[parts[1][1]]])
+	var lowest := [INF, INF, INF, INF]
+	for k in n:
+		for j in 4:
+			lowest[j] = minf(lowest[j], pts[k][j].y)
+	# How much each heel and ball is on the ground, per key.
+	var down := func(k: int, j: int) -> float:
+		return 1.0 - smoothstep(0.004, 0.025, pts[k][j].y - lowest[j])
+	# Ground-plane velocity of the planted parts, weighted by contact, per key step.
+	var vel: Array[Vector2] = []
+	var contact: Array[float] = []
+	for k in n:
+		var k2 := (k + 1) % n
+		var sum := Vector2.ZERO
+		var weight := 0.0
+		for j in 4:
+			var w: float = down.call(k, j)
+			var d: Vector3 = pts[k2][j] - pts[k][j]
+			sum += Vector2(d.x, d.z) * w
+			weight += w
+		vel.append(sum / weight if weight > 1e-4 else Vector2.ZERO)
+		contact.append(smoothstep(0.05, 0.5, weight))
+	# The steady rate: the contact-weighted mean. Airborne steps (the run's flight) keep
+	# their ballistic motion and take no correction.
+	var steady := Vector2.ZERO
+	var total := 0.0
+	for k in n:
+		steady += vel[k] * contact[k]
+		total += contact[k]
+	steady /= maxf(total, 1e-4)
+	var shift := Vector2.ZERO
+	var shifts: Array[Vector2] = []
+	var mean := Vector2.ZERO
+	for k in n:
+		shifts.append(shift)
+		mean += shift
+		shift += (steady - vel[k]) * contact[k]
+	mean /= n
+	for k in n:
+		var s := shifts[k] - mean
+		hips[k] += Vector3(s.x, 0.0, s.y)
+	return steady.y * n
+
+
+## Height of the lowest sole vertex with these local rotations and the hips at `hips`.
+func lowest_sole(local: Array[Quaternion], hips: Vector3) -> float:
+	var chain := fk(local, hips)
+	var basis: Array = chain[0]
+	var origin: Array = chain[1]
 	var lowest := INF
 	for v in foot_verts.size():
 		var p := Vector3.ZERO
@@ -506,6 +693,206 @@ func pose_land(t: float) -> Dictionary:
 	return p
 
 
+# ---------------------------------------------------------------- natural animation set
+
+## Joint-angle profiles (phase in the leg's own cycle, degrees) shaped like recorded
+## human gait. Each leg's heel strikes at phase 0. Walk stance lasts to about 0.6; run
+## stance to 0.38, then both feet are off the ground until the other foot lands.
+## Hip: + flexes the thigh forward. Knee: - bends. Ankle: + lifts the toes, - points them.
+## Toes: + bends them up at push-off. Shaped for heels: the knees never lock straight.
+const WALK_HIP := [[0.0, 26.0], [0.15, 19.0], [0.5, -13.0], [0.62, -16.0], [0.75, 5.0], [0.88, 28.0], [0.95, 28.0]]
+const WALK_KNEE := [[0.0, -4.0], [0.12, -15.0], [0.38, -5.0], [0.55, -18.0], [0.72, -58.0], [0.86, -28.0], [0.96, -5.0]]
+const WALK_ANKLE := [[0.0, 3.0], [0.08, -3.0], [0.42, 7.0], [0.6, -17.0], [0.7, -10.0], [0.85, 0.0]]
+const WALK_TOE := [[0.0, 0.0], [0.45, 4.0], [0.58, 24.0], [0.68, 4.0], [0.8, 0.0]]
+const RUN_HIP := [[0.0, 42.0], [0.2, 12.0], [0.38, -30.0], [0.5, -16.0], [0.7, 38.0], [0.86, 58.0]]
+const RUN_KNEE := [[0.0, -16.0], [0.12, -38.0], [0.32, -20.0], [0.42, -28.0], [0.62, -105.0], [0.8, -78.0], [0.94, -26.0]]
+const RUN_ANKLE := [[0.0, 3.0], [0.1, 8.0], [0.3, 4.0], [0.42, -28.0], [0.56, -14.0], [0.8, 0.0]]
+const RUN_TOE := [[0.0, 0.0], [0.3, 8.0], [0.4, 28.0], [0.5, 5.0], [0.62, 0.0]]
+
+
+## A smooth periodic curve through (phase, value) keys (phases ascending in [0, 1)):
+## Catmull-Rom, wrapping round from the last key to the first.
+func curve(keys: Array, t: float) -> float:
+	var n := keys.size()
+	t = fposmod(t, 1.0)
+	var tk := func(j: int) -> float: return float(keys[posmod(j, n)][0]) + floor(float(j) / n)
+	var vk := func(j: int) -> float: return float(keys[posmod(j, n)][1])
+	var j := -1
+	while tk.call(j + 1) <= t:
+		j += 1
+	var u: float = (t - tk.call(j)) / (tk.call(j + 1) - tk.call(j))
+	var p0: float = vk.call(j - 1)
+	var p1: float = vk.call(j)
+	var p2: float = vk.call(j + 1)
+	var p3: float = vk.call(j + 2)
+	return 0.5 * (2.0 * p1 + (p2 - p0) * u + (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3) * u * u
+			+ (3.0 * p1 - p0 - 3.0 * p2 + p3) * u * u * u)
+
+
+## One side's leg and arm for a gait. `lt` is this side's phase (heel strike at 0).
+## The arm swings opposite its own leg, lagging the leg slightly, and its elbow bends
+## more as it swings forward. Written for the left side; the right is mirrored.
+func gait_limbs(p: Dictionary, side: String, lt: float, run: bool) -> void:
+	var q := {}
+	if run:
+		q["UpperLeg"] = e(curve(RUN_HIP, lt), 4.0 * sin(TAU * lt), 1.5)
+		q["LowerLeg"] = e(curve(RUN_KNEE, lt), 0, 0)
+		q["Foot"] = e(curve(RUN_ANKLE, lt), 0, -1.0)
+		q["Toes"] = e(curve(RUN_TOE, lt), 0, 0)
+		var swing := -cos(TAU * (lt - 0.06))      # +1: this arm fully forward
+		q["Shoulder"] = e(0, 0, 1.5 * swing)
+		q["UpperArm"] = e(4.0 + 34.0 * swing, 4.0 * swing, -6)
+		q["LowerArm"] = e(70.0 + 14.0 * (0.5 + 0.5 * swing), 0, 0)
+		q["Hand"] = e(12, 0, -4)
+	else:
+		# Heels: the thighs swing slightly in, so the feet land near the midline.
+		q["UpperLeg"] = e(curve(WALK_HIP, lt), 3.0 * sin(TAU * lt), 2.5)
+		q["LowerLeg"] = e(curve(WALK_KNEE, lt), 0, 0)
+		q["Foot"] = e(curve(WALK_ANKLE, lt), 0, -1.5)
+		q["Toes"] = e(curve(WALK_TOE, lt), 0, 0)
+		var swing := -cos(TAU * (lt - 0.05))
+		q["Shoulder"] = e(0, 0, 0.8 * swing)
+		q["UpperArm"] = e(13.0 * swing, 2.0 * swing, -4)
+		q["LowerArm"] = e(10.0 + 10.0 * (0.5 + 0.5 * -cos(TAU * (lt - 0.12))), 0, 0)
+		q["Hand"] = e(6.0 + 3.0 * swing, 0, -3)
+	for part in q:
+		p[side + part] = q[part] if side == "Left" else mirror(q[part])
+
+
+## Walk (1 s cycle, left heel strike at t = 0). The pelvis turns with the swinging
+## leg, dips on the swinging side and shifts over the planted foot; the chest turns the
+## other way and the neck and head cancel it, so her gaze stays level and forward.
+func pose_walk_natural(t: float) -> Dictionary:
+	var ph := TAU * t
+	var p := {}
+	gait_limbs(p, "Left", t, false)
+	gait_limbs(p, "Right", fposmod(t + 0.5, 1.0), false)
+	p["hips_offset"] = Vector3(-0.018 * sin(ph), 0, 0)
+	p["Hips"] = e(2, -6.0 * cos(ph), -4.5 * sin(ph))
+	p["Spine"] = e(-1.5, 3.0 * cos(ph), 2.5 * sin(ph))
+	p["Chest"] = e(-1.0 + 0.6 * sin(2.0 * ph), 5.0 * cos(ph), 2.5 * sin(ph))
+	p["Neck"] = e(1, -1.0 * cos(ph), -1.0 * sin(ph))
+	p["Head"] = e(-0.5 + 0.8 * cos(2.0 * ph), -1.0 * cos(ph), -0.5 * sin(ph))
+	return p
+
+
+## Run (1 s cycle): a forward lean, high knee drive, pumping arms, and a moment with
+## both feet off the ground after each push-off (`lift`, applied after seating).
+func pose_run_natural(t: float) -> Dictionary:
+	var ph := TAU * t
+	var p := {}
+	gait_limbs(p, "Left", t, true)
+	gait_limbs(p, "Right", fposmod(t + 0.5, 1.0), true)
+	var half := fposmod(t, 0.5)
+	p["lift"] = 0.035 * sin(PI * (half - 0.38) / 0.12) if half > 0.38 else 0.0
+	p["hips_offset"] = Vector3(-0.01 * sin(ph), 0, 0)
+	p["Hips"] = e(4, -9.0 * cos(ph), -3.5 * sin(ph))
+	p["Spine"] = e(-9, 4.0 * cos(ph), 2.0 * sin(ph))
+	p["Chest"] = e(-4.0 + 1.0 * sin(2.0 * ph), 8.0 * cos(ph), 1.0 * sin(ph))
+	p["Neck"] = e(5, -1.5 * cos(ph), -1.0 * sin(ph))
+	p["Head"] = e(4.0 + 1.2 * cos(2.0 * ph), -1.5 * cos(ph), -0.5 * sin(ph))
+	return p
+
+
+## A relaxed contrapposto with organic motion (a 10 s loop): weight on her left leg
+## (pelvis over it, that hip raised, knee soft), the right leg eased forward, out and
+## turned out; shoulders tilting against the hips; arms hanging loose with soft elbows.
+## Three slightly uneven breaths, and the head, shoulders and settle of the hips move at
+## different rates, so nothing repeats in lockstep; the body never moves side to side.
+func pose_idle_natural(t: float) -> Dictionary:
+	var ph := TAU * t
+	var breath := sin(3.0 * ph) + 0.25 * sin(6.0 * ph + 0.7)
+	var settle := sin(ph + 0.5)
+	var p := {}
+	p["hips_offset"] = Vector3(-0.03, 0, 0.005)
+	p["Hips"] = e(1, 6, -5 + 0.5 * settle)
+	p["Spine"] = e(0.4 * breath, -3, 3 - 0.3 * settle)
+	p["Chest"] = e(-1.5 + 0.8 * breath, -3 + 0.8 * sin(ph + 2.2), 3 - 0.2 * settle)
+	p["Neck"] = e(1 - 0.3 * breath, 1.5 * sin(ph), -1)
+	p["Head"] = e(3 + 1.2 * sin(ph + 2.0) + 0.6 * sin(3.0 * ph), 4 + 2.5 * sin(ph) + 1.2 * sin(2.0 * ph + 1.3),
+			-4 + 0.8 * sin(2.0 * ph + 0.4))
+	p["LeftShoulder"] = e(0, 0, 3 + 0.6 * breath)
+	p["RightShoulder"] = mirror(e(0, 0, -1.5 + 0.6 * breath + 0.3 * sin(ph + 1.0)))
+	var arm_in: float = cfg.get("idle_arm_in", 3.0)
+	p["LeftUpperArm"] = e(-4, 4, arm_in)
+	p["LeftLowerArm"] = e(12 + 1.5 * breath, 8, 0)
+	p["LeftHand"] = e(8, 0, -4)
+	p["RightUpperArm"] = mirror(e(6, 4, arm_in + 1.0))
+	p["RightLowerArm"] = mirror(e(16 + 1.5 * breath + 0.8 * sin(ph + 0.9), 8, 0))
+	p["RightHand"] = mirror(e(10, 0, -4))
+	p["LeftUpperLeg"] = e(2, 7, 5)
+	p["LeftLowerLeg"] = e(-5, 0, 0)
+	p["LeftFoot"] = e(3, 0, -1)
+	p["RightUpperLeg"] = mirror(e(15, 12, -8))
+	p["RightLowerLeg"] = mirror(e(-30 + 1.0 * sin(ph + 1.6), 0, 0))
+	p["RightFoot"] = mirror(e(14, 0, 2))
+	return p
+
+
+## Rising: stretched up from the push-off, toes pointed, the leading knee drawn up and
+## the trailing leg extended, arms swung up and forward; looking slightly up.
+func pose_jump_natural(t: float) -> Dictionary:
+	var ph := TAU * t
+	var p := {}
+	p["Spine"] = e(4, 0, 0)
+	p["Chest"] = e(3 + 1.0 * sin(ph), 0, 0)
+	p["Neck"] = e(-1, 0, 0)
+	p["Head"] = e(4, 2, 0)
+	p["LeftUpperLeg"] = e(38 + 2.0 * sin(ph), 0, 1)
+	p["LeftLowerLeg"] = e(-62, 0, 0)
+	p["LeftFoot"] = e(-28, 0, 0)
+	p["RightUpperLeg"] = mirror(e(12, 0, 1))
+	p["RightLowerLeg"] = mirror(e(-28 - 2.0 * sin(ph), 0, 0))
+	p["RightFoot"] = mirror(e(-32, 0, 0))
+	p["LeftUpperArm"] = e(55 + 3.0 * sin(ph), 0, -18)
+	p["RightUpperArm"] = mirror(e(62 + 3.0 * sin(ph + 0.6), 0, -16))
+	both(p, "LowerArm", e(35, 0, 0))
+	both(p, "Hand", e(10, 0, 0))
+	return p
+
+
+## Falling: legs reaching down for the ground, a little apart, knees soft; arms out to
+## the sides for balance, drifting; looking down toward where she'll land.
+func pose_fall_natural(t: float) -> Dictionary:
+	var ph := TAU * t
+	var p := {}
+	p["Spine"] = e(-6, 0, 0)
+	p["Chest"] = e(-3, 0, 0)
+	p["Head"] = e(-6, 0, 0)
+	p["LeftUpperLeg"] = e(22, 0, -4)
+	p["LeftLowerLeg"] = e(-24, 0, 0)
+	p["LeftFoot"] = e(-8, 0, 0)
+	p["RightUpperLeg"] = mirror(e(6, 0, -4))
+	p["RightLowerLeg"] = mirror(e(-14, 0, 0))
+	p["RightFoot"] = mirror(e(-10, 0, 0))
+	p["LeftUpperArm"] = e(25 + 6.0 * sin(ph), 0, -55 - 6.0 * sin(ph + 1.0))
+	p["RightUpperArm"] = mirror(e(22 + 6.0 * sin(ph + 2.0), 0, -52 - 6.0 * sin(ph + 2.5)))
+	both(p, "LowerArm", e(25, 0, 0))
+	both(p, "Hand", e(8, 0, 0))
+	return p
+
+
+## Landing (0.55 s one-shot): the knees and hips give to absorb the impact, the torso
+## folds forward and the arms swing forward for balance, then she rises back to standing.
+## (Seating keeps her soles on the floor, so the crouch lowers her body naturally.)
+func pose_land_natural(t: float) -> Dictionary:
+	var d := smoothstep(0.0, 0.16, t) * (1.0 - smoothstep(0.3, 1.0, t))
+	var p := {}
+	p["Spine"] = e(-18.0 * d, 0, 0)
+	p["Chest"] = e(-5.0 * d, 0, 0)
+	p["Neck"] = e(8.0 * d, 0, 0)
+	p["Head"] = e(10.0 * d, 0, 0)
+	p["LeftUpperLeg"] = e(46.0 * d, 0, -2)
+	p["LeftLowerLeg"] = e(-86.0 * d, 0, 0)
+	p["LeftFoot"] = e(36.0 * d, 0, 0)
+	p["RightUpperLeg"] = mirror(e(40.0 * d, 0, -2))
+	p["RightLowerLeg"] = mirror(e(-76.0 * d, 0, 0))
+	p["RightFoot"] = mirror(e(32.0 * d, 0, 0))
+	both(p, "UpperArm", e(30.0 * d, 0, -12.0 * d))
+	both(p, "LowerArm", e(10.0 + 30.0 * d, 0, 0))
+	return p
+
+
 ## Samples `pose_fn(t)` into a clip keying every bone; a bone that holds still gets one
 ## key. Pose rotations act in the neutral stance's axes, as if her rest pose were
 ## already straight: with N the global neutral rotations, the animated global rotation
@@ -536,10 +923,14 @@ func make_clip(clip_name: String, length: float, keys: int, pose_fn: Callable, l
 		if grounded:
 			h = bone_head[0] + Vector3(offset.x, 0.0, offset.z)
 			var lowest := lowest_sole(local, h)
-			h.y -= lowest
+			# `lift` raises the body after seating: the run's airborne moments.
+			h.y += float(pose.get("lift", 0.0)) - lowest
 		worst = maxf(worst, absf(h.y - (bone_head[0].y + offset.y + stand_lift)))
 		locals.append(local)
 		hips.append(h)
+	if loop and clip_name in ["walk", "run"] and cfg.get("plant_feet", false):
+		var stride := plant_feet(locals, hips)
+		print("  %-6s feet planted: stride %.3f m per cycle" % [clip_name, stride])
 	for i in bone_names.size():
 		var tr := anim.add_track(Animation.TYPE_ROTATION_3D)
 		anim.track_set_path(tr, NodePath("Skeleton:" + bone_names[i]))
@@ -552,6 +943,13 @@ func make_clip(clip_name: String, length: float, keys: int, pose_fn: Callable, l
 	anim.track_set_path(pos_track, NodePath("Skeleton:Hips"))
 	for k in samples:
 		anim.position_track_insert_key(pos_track, times[k], hips[k])
+	if cfg.get("cubic_keys", false):
+		# Cubic (spherical, for rotations) instead of linear between keys: no corners
+		# in the motion at each key, which shows most in the sparsely keyed idle and air
+		# clips. Loop wrap keeps the curve smooth across a looping clip's seam.
+		for tr in anim.get_track_count():
+			anim.track_set_interpolation_type(tr, Animation.INTERPOLATION_CUBIC)
+			anim.track_set_interpolation_loop_wrap(tr, loop)
 	if grounded:
 		print("  %-6s seated on the floor (largest correction %.3f m)" % [clip_name, worst])
 	return anim
@@ -560,6 +958,15 @@ func make_clip(clip_name: String, length: float, keys: int, pose_fn: Callable, l
 func build_animations() -> AnimationLibrary:
 	var lib := AnimationLibrary.new()
 	lib.add_animation("RESET", make_clip("RESET", 0.001, 1, func(_t: float) -> Dictionary: return {}, false))
+	if cfg.get("anim", "") == "natural":
+		lib.add_animation("idle", make_clip("idle", 10.0, 100, pose_idle_natural))
+		lib.add_animation("walk", make_clip("walk", 1.0, 40, pose_walk_natural))
+		lib.add_animation("run", make_clip("run", 1.0, 40, pose_run_natural))
+		lib.add_animation("jump", make_clip("jump", 1.0, 12, pose_jump_natural))
+		lib.add_animation("fall", make_clip("fall", 1.6, 16, pose_fall_natural))
+		lib.add_animation("land", make_clip("land", 0.55, 22, pose_land_natural, false))
+		print("strides: walk %.2f m, run %.2f m per cycle" % [estimate_stride(pose_walk_natural), estimate_stride(pose_run_natural)])
+		return lib
 	lib.add_animation("idle", make_clip("idle", 8.0, 64, pose_idle))
 	lib.add_animation("walk", make_clip("walk", 1.0, 24, pose_walk))
 	lib.add_animation("run", make_clip("run", 1.0, 24, pose_run))
@@ -603,6 +1010,11 @@ func add_springs(skel: Skeleton3D, scene_root: Node) -> void:
 		sim.set_gravity(i, params[2])
 		sim.set_radius(i, params[3])
 		sim.set_enable_all_child_collisions(i, params[4])
+		if params.size() > 5:
+			# Simulated relative to this bone: her running doesn't blow the chain back,
+			# only her own bounce, lean and turns swing it.
+			sim.set_center_from(i, SpringBoneSimulator3D.CENTER_FROM_BONE)
+			sim.set_center_bone_name(i, params[5])
 	var colliders := []
 	for entry in cfg.get("colliders", []):
 		colliders.append(entry)

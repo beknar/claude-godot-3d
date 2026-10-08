@@ -1,0 +1,115 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/city/city_street.gd" id="1_street"]
+[ext_resource type="Script" path="res://game/walker_controller.gd" id="2_walker"]
+[ext_resource type="PackedScene" path="res://fig4/fig4.tscn" id="3_fig4"]
+[ext_resource type="Script" path="res://game/orbit_camera.gd" id="4_camera"]
+[ext_resource type="Script" path="res://game/figure_procedural.gd" id="5_procedural"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dusk"]
+sky_top_color = Color(0.07, 0.09, 0.2, 1)
+sky_horizon_color = Color(0.78, 0.46, 0.36, 1)
+sky_curve = 0.12
+ground_bottom_color = Color(0.05, 0.05, 0.07, 1)
+ground_horizon_color = Color(0.4, 0.3, 0.32, 1)
+sun_angle_max = 20.0
+
+[sub_resource type="Sky" id="Sky_dusk"]
+sky_material = SubResource("ProceduralSkyMaterial_dusk")
+
+[sub_resource type="Environment" id="Environment_dusk"]
+background_mode = 2
+sky = SubResource("Sky_dusk")
+ambient_light_source = 3
+ambient_light_energy = 0.55
+tonemap_mode = 2
+tonemap_exposure = 1.1
+glow_enabled = true
+glow_intensity = 0.7
+glow_hdr_threshold = 1.0
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.36, 0.3, 0.36, 1)
+fog_density = 1.0
+fog_sky_affect = 0.3
+fog_depth_curve = 1.4
+fog_depth_begin = 60.0
+fog_depth_end = 220.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.25
+height = 1.7
+
+[node name="Fig4Level" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dusk")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.5, 0.17, -0.85, 0, 0.98, 0.2, 0.87, -0.1, 0.49, 0, 0, 0)
+light_color = Color(1, 0.66, 0.46, 1)
+light_energy = 0.55
+shadow_enabled = true
+directional_shadow_max_distance = 60.0
+
+[node name="Street" type="Node3D" parent="."]
+script = ExtResource("1_street")
+street_length = 480.0
+building_height_scale = 2.0
+parked_cars = 24
+cars_per_lane = 6
+
+[node name="Player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("camera_rig", "model_pivot", "animation_player", "hud_label")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 8)
+script = ExtResource("2_walker")
+camera_rig = NodePath("../Camera")
+model_pivot = NodePath("ModelPivot")
+animation_player = NodePath("ModelPivot/Fig4/AnimationPlayer")
+hud_label = NodePath("../HUD/Status")
+walk_speed = 1.4
+run_speed = 4.2
+walk_stride = 1.25
+run_stride = 2.4
+eased_transitions = true
+land_fade_in = 0.08
+land_fade_out = 0.3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="ModelPivot" type="Node3D" parent="Player"]
+
+[node name="Fig4" parent="Player/ModelPivot" instance=ExtResource("3_fig4")]
+
+[node name="Procedural" type="Node" parent="Player" node_paths=PackedStringArray("walker", "skeleton", "ground", "camera")]
+script = ExtResource("5_procedural")
+walker = NodePath("..")
+skeleton = NodePath("../ModelPivot/Fig4/Skeleton")
+ground = NodePath("../../Street")
+camera = NodePath("../../Camera")
+
+[node name="Camera" type="Camera3D" parent="." node_paths=PackedStringArray("target", "terrain")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 12)
+current = true
+fov = 60.0
+near = 0.1
+far = 900.0
+script = ExtResource("4_camera")
+target = NodePath("../Player")
+focus_height = 1.35
+distance = 3.8
+terrain = NodePath("../Street")
+ground_clearance = 0.3
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Status" type="Label" parent="HUD"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 17.0
+offset_bottom = 35.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18
+text = "WASD move"
